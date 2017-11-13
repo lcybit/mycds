@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Questionnaire</title>
+<link rel="stylesheet" href="/plugin/layui/css/layui.css" />
+<script src="/plugin/jquery/jquery.js"></script>
+<script src="/plugin/jquery/jquery.serializejson.js"></script>
+<script src="/plugin/jsrender/jsrender.js"></script>
+<script src="/plugin/layui/layui.all.js"></script>
+</head>
+<body>
+  <div class="layui-container" style="margin-top: 30px; width:100%;">
+    <form id="questionnaireDetail" class="layui-form" method="post">
+      <div class="layui-form-item">
+        <div class="layui-form-row">Questionnaire ID:</div>
+        <div class="layui-input-block">
+          <input class="layui-input" name="questionnaireId" id="questionnaireId" type="text" />
+        </div>
+      </div>
+    </form>
+  </div>
+  <script id="questionnaire" type="text/x-jsrender">
+  	<div class="layui-form-item">
+      <div class="layui-form-row">
+        <h1>{{:title}}</h1>
+      </div>
+    </div>
+	{{for questionList tmpl="#questions" /}}
+    <div class="layui-input-inline">
+      <button class="layui-btn" type="button" onclick="goSubmit()">Submit</button>
+      <button class="layui-btn" type="button" onclick="goReset()">Reset</button>
+      <button class="layui-btn" type="button" onclick="goBack()">Back</button>
+    </div>
+  </script>
+  <script id="questions" type="text/x-jsrender">
+    <div class="layui-form-item">
+      <div class="layui-form-row">{{:#index + 1 + '. ' + title}}</div>
+      <div class="layui-input-block">
+      {{for optionList tmpl="#options" /}}
+      </div>
+    </div>
+  </script>
+  <script id="options" type="text/x-jsrender">
+    <input class="layui-input"
+           type="{{:type}}"
+           name="{{:'q' + #parent.getIndex()}}"
+           value="{{:value}}"
+           title="{{:title}}" 
+           {{if value==='0'}}checked="checked"{{/if}} />
+  </script>
+  <script>
+    $(document).ready(function() {
+      var questionnaireId = localStorage.getItem('currentQuestionnaireId');
+      $('#questionnaireId').attr('value', questionnaireId);
+      goDetail(questionnaireId);
+      layui.use('form', function() {
+        layui.form.render();
+      });
+    });
+  
+    function goBack() {
+      jump('/html/assessment/questionnaire/list.html');
+    }
+  
+    function goDetail(id) {
+      $.ajax({
+        async : false,
+        type : 'GET',
+        url : '/questionnaire/detail/' + id,
+        success : function(data) {
+          var questionnaireDetail = $('#questionnaireDetail');
+          var questionnaire = $.templates('#questionnaire');
+          questionnaireDetail.append(questionnaire.render(data));
+        }
+      });
+    }
+  
+    function goSubmit() {
+      $.ajax({
+        async : false,
+        type : 'POST',
+        url : '/result/create',
+        dataType : 'json',
+        contentType : 'application/json',
+        data : JSON.stringify($('#questionnaireDetail').serializeJSON()),
+        success : function(result) {
+          console.log(result);
+          localStorage.setItem('currentResultId', result.resultId);
+          jump('/html/assessment/questionnaire/chart.html')
+          return false;
+        },
+        error : function(xhr, resp, text) {
+          console.log(xhr, resp, text);
+          return false;
+        }
+      });
+    }
+    
+  </script>
+</body>
+</html>

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="BlockMapper">
+
+	<sql id="table">cmpt_block</sql>
+
+	<sql id="attr0">block_id</sql>
+	<sql id="attr1">group_id</sql>
+	<sql id="attr2">title</sql>
+	<sql id="attr3">status</sql>
+	
+	<sql id="primary">
+		<include refid="attr0"/>
+	</sql>
+	
+	<sql id="others">
+		<include refid="attr1"/>,
+		<include refid="attr2"/>,
+		<include refid="attr3"/>
+	</sql>
+	
+	<sql id="valPrimary">
+		#{<include refid="attr0"/>}
+	</sql>
+	
+	<sql id="valOthers">
+		#{<include refid="attr1"/>},
+		#{<include refid="attr2"/>},
+		#{<include refid="attr3"/>}
+	</sql>
+
+	<sql id="eqnPrimary">
+		<include refid="attr0"/> = #{<include refid="attr0"/>}
+	</sql>
+	
+	<sql id="eqnOthers">
+		<include refid="attr1"/> = #{<include refid="attr1"/>},
+		<include refid="attr2"/> = #{<include refid="attr2"/>},
+		<include refid="attr2"/> = #{<include refid="attr3"/>}
+	</sql>
+
+	<insert id="insert" parameterType="Map">
+		INSERT INTO
+			<include refid="table"/>
+			(<include refid="primary"/>,
+			<include refid="others"/>)
+		VALUES
+			(<include refid="valPrimary"/>,
+			<include refid="valOthers"/>)
+	</insert>
+
+	<delete id="delete" parameterType="String">
+		DELETE FROM
+			<include refid="table"/>
+		WHERE
+			<include refid="eqnPrimary"/>
+	</delete>
+	
+	<delete id="batchDelete" parameterType="List">
+		DELETE FROM
+			<include refid="table"/>
+		WHERE
+			<include refid="primary"/>
+		IN
+			<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+	</delete>
+
+	<update id="update" parameterType="Map">
+		UPDATE
+			<include refid="table"/>
+		SET
+			<include refid="eqnOthers"/>
+		WHERE
+			<include refid="eqnPrimary"/>
+	</update>
+
+	<select id="selectOne" parameterType="String" resultType="Map">
+		SELECT
+			<include refid="primary"/>,
+			<include refid="others"/>
+		FROM
+			<include refid="table"/>
+		WHERE
+			<include refid="eqnPrimary"/>
+	</select>
+
+	<select id="selectList" parameterType="String" resultType="Map">
+		SELECT
+			<include refid="primary"/>,
+			<include refid="others"/>
+		FROM
+			<include refid="table"/>
+	</select>
+
+</mapper>

@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ResultMapper">
+
+  <resultMap id="resultMap" type="Result">
+    <id property="resultId" column="result_id"/>
+    <result property="questionnaireId" column="questionnaire_id"/>
+    <result property="sessionId" column="session_id"/>
+    <result property="q0" column="q0"/>
+    <result property="q1" column="q1"/>
+    <result property="q2" column="q2"/>
+    <result property="q3" column="q3"/>
+    <result property="q4" column="q4"/>
+    <result property="q5" column="q5"/>
+    <result property="q6" column="q6"/>
+    <result property="q7" column="q7"/>
+    <result property="q8" column="q8"/>
+    <result property="q9" column="q9"/>
+    <result property="q10" column="q10"/>
+  </resultMap>
+
+  <sql id="table">asmt_result</sql>
+
+  <sql id="attr0">result_id</sql>
+  <sql id="attr1">questionnaire_id</sql>
+  <sql id="attr2">session_id</sql>
+  <sql id="attr3">q0</sql>
+  <sql id="attr4">q1</sql>
+  <sql id="attr5">q2</sql>
+  <sql id="attr6">q3</sql>
+  <sql id="attr7">q4</sql>
+  <sql id="attr8">q5</sql>
+  <sql id="attr9">q6</sql>
+  <sql id="attr10">q7</sql>
+  <sql id="attr11">q8</sql>
+  <sql id="attr12">q9</sql>
+  <sql id="attr13">q10</sql>
+
+  <sql id="val0">#{resultId}</sql>
+  <sql id="val1">#{questionnaireId}</sql>
+  <sql id="val2">#{sessionId}</sql>
+  <sql id="val3">#{q0}</sql>
+  <sql id="val4">#{q1}</sql>
+  <sql id="val5">#{q2}</sql>
+  <sql id="val6">#{q3}</sql>
+  <sql id="val7">#{q4}</sql>
+  <sql id="val8">#{q5}</sql>
+  <sql id="val9">#{q6}</sql>
+  <sql id="val10">#{q7}</sql>
+  <sql id="val11">#{q8}</sql>
+  <sql id="val12">#{q9}</sql>
+  <sql id="val13">#{q10}</sql>
+
+  <sql id="eqn0"><include refid="attr0"/>=<include refid="val0"/></sql>
+  <sql id="eqn1"><include refid="attr1"/>=<include refid="val1"/></sql>
+  <sql id="eqn2"><include refid="attr2"/>=<include refid="val2"/></sql>
+  <sql id="eqn3"><include refid="attr3"/>=<include refid="val3"/></sql>
+  <sql id="eqn4"><include refid="attr4"/>=<include refid="val4"/></sql>
+  <sql id="eqn5"><include refid="attr5"/>=<include refid="val5"/></sql>
+  <sql id="eqn6"><include refid="attr6"/>=<include refid="val6"/></sql>
+  <sql id="eqn7"><include refid="attr7"/>=<include refid="val7"/></sql>
+  <sql id="eqn8"><include refid="attr8"/>=<include refid="val8"/></sql>
+  <sql id="eqn9"><include refid="attr9"/>=<include refid="val9"/></sql>
+  <sql id="eqn10"><include refid="attr10"/>=<include refid="val10"/></sql>
+  <sql id="eqn11"><include refid="attr11"/>=<include refid="val11"/></sql>
+  <sql id="eqn12"><include refid="attr12"/>=<include refid="val12"/></sql>
+  <sql id="eqn13"><include refid="attr13"/>=<include refid="val13"/></sql>
+
+  <sql id="attrPrimary">
+    <include refid="attr0"/>
+  </sql>
+  <sql id="attrOthers">
+    <include refid="attr1"/>,
+    <include refid="attr2"/>,
+    <include refid="attr3"/>,
+    <include refid="attr4"/>,
+    <include refid="attr5"/>,
+    <include refid="attr6"/>,
+    <include refid="attr7"/>,
+    <include refid="attr8"/>,
+    <include refid="attr9"/>,
+    <include refid="attr10"/>,
+    <include refid="attr11"/>,
+    <include refid="attr12"/>,
+    <include refid="attr13"/>
+  </sql>
+  <sql id="attrAll">
+    <include refid="attrPrimary"/>,
+	<include refid="attrOthers"/>
+  </sql>
+
+  <sql id="valPrimary">
+    <include refid="val0"/>
+  </sql>
+  <sql id="valOthers">
+    <include refid="val1"/>,
+    <include refid="val2"/>,
+    <include refid="val3"/>,
+    <include refid="val4"/>,
+    <include refid="val5"/>,
+    <include refid="val6"/>,
+    <include refid="val7"/>,
+    <include refid="val8"/>,
+    <include refid="val9"/>,
+    <include refid="val10"/>,
+    <include refid="val11"/>,
+    <include refid="val12"/>,
+    <include refid="val13"/>
+  </sql>
+  <sql id="valAll">
+    <include refid="valPrimary"/>,
+	<include refid="valOthers"/>
+  </sql>
+
+  <sql id="eqnPrimary">
+    <include refid="eqn0"/>
+  </sql>
+  <sql id="eqnOthers">
+    <include refid="eqn1"/>,
+    <include refid="eqn2"/>,
+    <include refid="eqn3"/>,
+    <include refid="eqn4"/>,
+    <include refid="eqn5"/>,
+    <include refid="eqn6"/>,
+    <include refid="eqn7"/>,
+    <include refid="eqn8"/>,
+    <include refid="eqn9"/>,
+    <include refid="eqn10"/>,
+    <include refid="eqn11"/>,
+    <include refid="eqn12"/>,
+    <include refid="eqn13"/>
+  </sql>
+  <sql id="eqnAll">
+    <include refid="eqnPrimary"/>,
+	<include refid="eqnOthers"/>
+  </sql>
+  <sql id="eqnWhere">
+    <include refid="eqn0"/>
+  </sql>
+  <sql id="eqnSessionId">
+    <include refid="eqn2"/>
+  </sql>
+
+  <insert id="insert" parameterType="Result">
+    INSERT INTO
+    <include refid="table"/>
+    (
+    <include refid="attrAll"/>
+    ) VALUES (
+    <include refid="valAll"/>
+    )
+  </insert>
+
+  <delete id="delete" parameterType="String">
+    DELETE FROM
+    <include refid="table"/>
+    WHERE
+    <include refid="eqnWhere"/>
+  </delete>
+
+  <delete id="batchDelete" parameterType="List">
+    DELETE FROM
+    <include refid="table"/>
+    WHERE
+    <include refid="attrPrimary"/>
+    IN
+    <foreach item="item" index="index" collection="list" open="(" separator="," close=")">#{item}</foreach>
+  </delete>
+
+  <update id="update" parameterType="Result">
+    UPDATE
+    <include refid="table"/>
+    SET
+    <include refid="eqnAll"/>
+    WHERE
+    <include refid="eqnWhere"/>
+  </update>
+
+  <select id="selectOne" parameterType="String" resultType="Result">
+    SELECT
+    <include refid="attrAll"/>
+    FROM
+    <include refid="table"/>
+    WHERE
+    <include refid="eqnWhere"/>
+  </select>
+
+  <select id="selectList" parameterType="String" resultType="Result">
+    SELECT
+    <include refid="attrAll"/>
+    FROM
+    <include refid="table"/>
+  </select>
+  
+  <select id="selectListBySessionId" parameterType="String" resultType="Result">
+    SELECT
+    <include refid="attrAll"/>
+    FROM
+    <include refid="table"/>
+    WHERE
+    <include refid="eqnSessionId"/>
+  </select>
+
+</mapper>

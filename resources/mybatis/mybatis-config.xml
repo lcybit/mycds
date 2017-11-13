@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD SQL Map Config 3.0//EN"  
+	"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+  <settings>
+    <setting name="cacheEnabled" value="true" />
+    <setting name="useGeneratedKeys" value="true" />
+    <setting name="defaultExecutorType" value="REUSE" />
+    <setting name="mapUnderscoreToCamelCase" value="true" />
+  </settings>
+  <typeAliases>
+    <typeAlias type="com.jefflee.entity.Assessment" alias="Assessment" />
+    <typeAlias type="com.jefflee.entity.Questionnaire" alias="Questionnaire" />
+    <typeAlias type="com.jefflee.entity.Contains" alias="Contains" />
+    <typeAlias type="com.jefflee.entity.Group" alias="Group" />
+    <typeAlias type="com.jefflee.entity.Option" alias="Option" />
+    <typeAlias type="com.jefflee.entity.Question" alias="Question" />
+    <typeAlias type="com.jefflee.entity.Result" alias="Result" />
+  </typeAliases>
+</configuration>

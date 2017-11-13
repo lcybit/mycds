@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Create Question</title>
+<link rel="stylesheet" href="/plugin/layui/css/layui.css" />
+<script src="/plugin/jquery/jquery.js"></script>
+<script src="/plugin/jquery/jquery.serializejson.js"></script>
+<script src="/plugin/jsrender/jsrender.js"></script>
+<script src="/plugin/layui/layui.all.js"></script>
+</head>
+<body>
+  <div class="layui-container" style="margin-top:30px;">
+    <form class="layui-form" id="optionDto" method="post">
+      <div class="layui-form-item">
+        <label class="layui-form-label">Question ID:</label>
+        <div class="layui-input-block">
+          <input class="layui-input" name="questionId" id="questionId" type="text" />
+        </div>
+      </div>
+      <div class="layui-form-item">
+        <label class="layui-form-label">Type:</label>
+        <div class="layui-input-block">
+          <input type="radio" name="type" value="radio" title="radio" />
+          <input type="radio" name="type" value="checkbox" title="checkbox" />
+          <input type="radio" name="type" value="text" title="text" />
+        </div>
+      </div>
+      <div class="layui-form-item">
+        <label class="layui-form-label">Title:</label>
+        <div class="layui-input-block">
+          <input class="layui-input" name="title" type="text" />
+        </div>
+      </div>
+      <div class="layui-form-item">
+        <label class="layui-form-label">Value:</label>
+        <div class="layui-input-block">
+          <input class="layui-input" name="value" type="text" />
+        </div>
+      </div>
+      <div class="layui-form-item">
+        <div class="layui-input-block">
+          <button class="layui-btn" type="submit" onclick="goCreate()">Create</button>
+          <button class="layui-btn" type="button" onclick="goCancel()">Cancel</button>
+        </div>
+      </div>
+    </form>
+  </div>
+  <script>
+    $(document).ready(function() {
+      var questionId = localStorage.getItem('currentQuestionId');
+      $('#questionId').attr('value', questionId);
+    });
+  
+    var index = parent.layer.getFrameIndex(window.name);
+    function goCreate() {
+      $.ajax({
+        async : false,
+        url : '/option/create',
+        type : 'POST',
+        dataType : 'json',
+        contentType : 'application/json',
+        data : JSON.stringify($('#optionDto').serializeJSON()),
+        success : function(result) {
+          console.log(result);
+          return false;
+        },
+        error : function(xhr, resp, text) {
+          console.log(xhr, resp, text);
+          return false;
+        }
+      });
+      parent.layer.close(index);
+      parent.goList();
+    }
+    function goCancel() {
+      parent.layer.close(index);
+    }
+  </script>
+</body>
+</html>

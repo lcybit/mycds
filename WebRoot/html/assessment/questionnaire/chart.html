@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" href="/plugin/layui/css/layui.css">
+<script src="/plugin/layui/layui.all.js"></script>
+<script src="/plugin/jquery/jquery.js"></script>
+<script src="/plugin/jquery/jquery.serializejson.js"></script>
+<script src="/plugin/jsrender/jsrender.js"></script>
+<script src="/plugin/echarts/echarts.js"></script>
+</head>
+<body>
+  <div class="layui-container" style="width:100%; height:100%">
+    <button id="convert" class="layui-btn" onclick="goConvert()">Convert</button>
+    <div id="riskChart" style="width:100%; height:500px"></div>
+  </div>
+  <script id="conclusion" type="text/x-jsrender">
+    <p>Your colorectal caner risk is {{:totalRisk}}</p>
+  </script>
+  <script>
+    var status = 'person';
+    var riskChart = echarts.init(document.getElementById('riskChart'));
+    var resultId = localStorage.getItem('currentResultId');
+    $(document).ready(function() {
+      goChart(resultId);
+    });
+  
+    function goChart(resultId) {
+      $.ajax({
+        async : false,
+        type : 'GET',
+        url : '/result/assess/' + resultId,
+        contentType : 'application/json',
+        success : function(result) {
+          console.log(result);
+          var conclusion = $.templates('#conclusion');
+          $('.layui-container').append(conclusion.render(result));
+          if(status === 'person') {
+            displayByPerson(result.riskData);
+          } else if(status === 'risk') {
+            displayByRisk(result.riskData);
+          }
+        },
+        error : function(xhr, resp, text) {
+          console.log(xhr, resp, text);
+        }
+      });
+    }
+    
+    function displayByPerson(riskData) {
+      var legendData = [];
+      var series = [];
+      for (var risk in riskData) {
+        legendData.push(risk);
+        var serie = {
+          name: risk,
+          type: 'bar',
+          stack: 'TotalValue',
+          label: {
+            normal: {
+              show: true,
+              position: 'insideRight'
+            }
+          },
+          data: [riskData[risk]]
+        };
+        series.push(serie);
+      }
+      var option = {
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'shadow'
+          }
+        },
+        legend: {
+          data: legendData
+        },
+        grid: {
+          left: '3%',
+          right: '4%',
+          bottom: '3%',
+          containLabel: true
+        },
+        xAxis:  {
+          type: 'category',
+          data: ['You']
+        },
+        yAxis: {
+          type: 'value'
+        },
+        series: series
+      };
+      riskChart.setOption(option, true);
+      window.onresize = riskChart.resize;
+    }
+
+    function displayByRisk(riskData) {
+      var xAxisData = [];
+      var seriesData = [];
+      for (var risk in riskData) {
+        xAxisData.push(risk);
+        seriesData.push(riskData[risk]);
+      }
+      var option = {
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'shadow'
+          }
+        },
+        legend: {
+          data: ['You']
+        },
+        grid: {
+          left: '3%',
+          right: '4%',
+          bottom: '3%',
+          containLabel: true
+        },
+        xAxis:  {
+          type: 'category',
+          data: xAxisData
+        },
+        yAxis: {
+          type: 'value'
+        },
+        series: [{
+          name: 'You',
+          type: 'bar',
+          stack: 'TotalValue',
+          label: {
+            normal: {
+              show: true,
+              position: 'insideRight'
+            }
+          },
+          data: seriesData
+        }]
+      };
+      riskChart.setOption(option, true);
+      window.onresize = riskChart.resize;
+    }
+		
+    function goConvert() {
+      if(status === 'person') {
+        status = 'risk';
+      } else if(status === 'risk') {
+        status = 'person';
+      }
+      goChart(resultId);
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>MyCDS</title>
+<link rel="stylesheet" href="/plugin/layui/css/layui.css" />
+<script src="/plugin/jquery/jquery.js"></script>
+<script src="/plugin/jquery/jquery.serializejson.js"></script>
+<script src="/plugin/jsrender/jsrender.js"></script>
+<script src="/plugin/layui/layui.all.js"></script>
+</head>
+<body>
+  <div class="layui-side layui-bg-black" style="float:left;">
+    <div class="layui-side-scroll">
+      <ul class="layui-nav layui-nav-tree">
+        <li class="layui-nav-item" id="home">
+          <a onclick="jump('/html/common/home.html')" style="cursor:pointer">Home</a>
+        </li>
+        <li class="layui-nav-item" id="crcRiskAssessment">
+          <a onclick="jump('/html/assessment/questionnaire/list.html')" style="cursor:pointer">CRC Risk Assessment</a>
+        </li>
+        <li class="layui-nav-item" id="scheduleAnAppointment">
+          <a onclick="jump('/html/common/home.html')" style="cursor:pointer">Schedule an Appointment</a>
+        </li>
+        <li class="layui-nav-item" id="crcScreening">
+          <a onclick="jump('/html/common/home.html')" style="cursor:pointer">CRC Screening</a>
+        </li>
+        <li class="layui-nav-item" id="otherResources">
+          <a onclick="jump('/html/common/home.html')" style="cursor:pointer">Other Recourses</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</body>
+</html>

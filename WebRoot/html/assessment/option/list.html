@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Question List</title>
+<link rel="stylesheet" href="/plugin/layui/css/layui.css" />
+<script src="/plugin/jquery/jquery.js"></script>
+<script src="/plugin/jquery/jquery.serializejson.js"></script>
+<script src="/plugin/jsrender/jsrender.js"></script>
+<script src="/plugin/layui/layui.all.js"></script>
+</head>
+<body>
+  <div class="layui-container" style="width:100%;">
+    <table class="layui-table">
+      <thead>
+        <tr>
+          <th>option ID</th>
+          <th>Type</th>
+          <th>Title</th>
+          <th>Value</th>
+          <th>Status</th>
+          <th>Operation</th>
+        </tr>
+      </thead>
+      <tbody id="optionList">
+      </tbody>
+    </table>
+    <div class="layui-input-inline">
+      <button class="layui-btn" onclick="goBack()">Back</button>
+      <button class="layui-btn" onclick="goAdd()">Add</button>
+    </div>
+  </div>
+  <script id="options" type="text/x-jsrender">
+    <tr>
+      <td>{{:optionId}}</td>
+      <td>{{:type}}</td>
+      <td>{{:title}}</td>
+      <td>{{:value}}</td>
+      <td>{{:status}}</td>
+      <td>
+        <button class="layui-btn" onclick="goModify('{{:optionId}}')">Modify</button>
+      </td>
+    </tr>
+  </script>
+  <script>
+    $(document).ready(function() {
+      goList();
+    })
+    
+    function goAdd() {
+      layui.use('layer', function() {
+        var layer = layui.layer;
+        layer.open({
+          type : 2,
+          id : 'create',
+          title : 'New Option',
+          content : '/html/assessment/option/create.html',
+          area : [ '700px', '500px' ],
+          shade : 0.5,
+          closeBtn : false
+        });
+      });
+    }
+    
+    function goBack() {
+      jump('/html/assessment/question/list.html');
+    }
+    
+    function goList() {
+      var id = localStorage.getItem('currentQuestionId');
+      $.ajax({
+        async : false,
+        type : 'GET',
+        url : '/option/list/' + id,
+        success : function(data) {
+          var optionList = $('#optionList');
+          var options = $.templates('#options');
+          optionList.append(options.render(data));
+        }
+      });
+    }
+  </script>
+</body>
+</html>

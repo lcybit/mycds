@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="OptionMapper">
+
+  <resultMap id="optionMap" type="Option">
+    <id property="optionId" column="option_id"/>
+    <result property="type" column="type"/>
+    <result property="title" column="title"/>
+    <result property="value" column="value"/>
+    <result property="status" column="status"/>
+  </resultMap>
+
+  <sql id="table">asmt_option</sql>
+
+  <sql id="attr0">option_id</sql>
+  <sql id="attr1">type</sql>
+  <sql id="attr2">title</sql>
+  <sql id="attr3">value</sql>
+  <sql id="attr4">status</sql>
+
+  <sql id="val0">#{optionId}</sql>
+  <sql id="val1">#{type}</sql>
+  <sql id="val2">#{title}</sql>
+  <sql id="val3">#{value}</sql>
+  <sql id="val4">#{status}</sql>
+
+  <sql id="eqn0"><include refid="attr0"/>=<include refid="val0"/></sql>
+  <sql id="eqn1"><include refid="attr1"/>=<include refid="val1"/></sql>
+  <sql id="eqn2"><include refid="attr2"/>=<include refid="val2"/></sql>
+  <sql id="eqn3"><include refid="attr3"/>=<include refid="val3"/></sql>
+  <sql id="eqn4"><include refid="attr4"/>=<include refid="val4"/></sql>
+
+  <sql id="attrPrimary">
+    <include refid="attr0"/>
+  </sql>
+  <sql id="attrOthers">
+    <include refid="attr1"/>,
+    <include refid="attr2"/>,
+    <include refid="attr3"/>,
+    <include refid="attr4"/>
+  </sql>
+  <sql id="attrAll">
+    <include refid="attrPrimary"/>,
+	<include refid="attrOthers"/>
+  </sql>
+
+  <sql id="valPrimary">
+    <include refid="val0"/>
+  </sql>
+  <sql id="valOthers">
+    <include refid="val1"/>,
+    <include refid="val2"/>,
+    <include refid="val3"/>,
+    <include refid="val4"/>
+  </sql>
+  <sql id="valAll">
+    <include refid="valPrimary"/>,
+	<include refid="valOthers"/>
+  </sql>
+
+  <sql id="eqnPrimary">
+    <include refid="eqn0"/>
+  </sql>
+  <sql id="eqnOthers">
+    <include refid="eqn1"/>,
+    <include refid="eqn2"/>,
+    <include refid="eqn3"/>,
+    <include refid="eqn4"/>
+  </sql>
+  <sql id="eqnAll">
+    <include refid="eqnPrimary"/>,
+	<include refid="eqnOthers"/>
+  </sql>
+  <sql id="eqnWhere">
+    <include refid="eqn0"/>
+  </sql>
+
+  <insert id="insert" parameterType="Option">
+    INSERT INTO
+    <include refid="table"/>
+    (
+    <include refid="attrAll"/>
+    ) VALUES (
+    <include refid="valAll"/>
+    )
+  </insert>
+
+  <delete id="delete" parameterType="String">
+    DELETE FROM
+    <include refid="table"/>
+    WHERE
+    <include refid="eqnWhere"/>
+  </delete>
+
+  <delete id="batchDelete" parameterType="List">
+    DELETE FROM
+    <include refid="table"/>
+    WHERE
+    <include refid="attrPrimary"/>
+    IN
+    <foreach item="item" index="index" collection="list" open="(" separator="," close=")">#{item}</foreach>
+  </delete>
+
+  <update id="update" parameterType="Option">
+    UPDATE
+    <include refid="table"/>
+    SET
+    <include refid="eqnAll"/>
+    WHERE
+    <include refid="eqnWhere"/>
+  </update>
+
+  <select id="selectOne" parameterType="String" resultType="Option">
+    SELECT
+    <include refid="attrAll"/>
+    FROM
+    <include refid="table"/>
+    WHERE
+    <include refid="eqnWhere"/>
+  </select>
+
+  <select id="selectList" parameterType="String" resultType="Option">
+    SELECT
+    <include refid="attrAll"/>
+    FROM
+    <include refid="table"/>
+  </select>
+
+</mapper>

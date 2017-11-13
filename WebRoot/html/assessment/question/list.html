@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Question List</title>
+<link rel="stylesheet" href="/plugin/layui/css/layui.css" />
+<script src="/plugin/jquery/jquery.js"></script>
+<script src="/plugin/jquery/jquery.serializejson.js"></script>
+<script src="/plugin/jsrender/jsrender.js"></script>
+<script src="/plugin/layui/layui.all.js"></script>
+</head>
+<body>
+  <div class="layui-container" style="width:100%;">
+    <table class="layui-table">
+      <thead>
+        <tr>
+          <th>Question ID</th>
+          <th>Title</th>
+          <th>Status</th>
+          <th>Operation</th>
+        </tr>
+      </thead>
+      <tbody id="questionList">
+      </tbody>
+    </table>
+    <div class="layui-input-inline">
+      <button class="layui-btn" onclick="goBack()">Back</button>
+      <button class="layui-btn" onclick="goAdd()">Add</button>
+    </div>
+  </div>
+  <script id="questions" type="text/x-jsrender">
+    <tr>
+      <td>{{:questionId}}</td>
+      <td>{{:title}}</td>
+      <td>{{:status}}</td>
+      <td>
+        <button class="layui-btn" onclick="goModify('{{:questionId}}')">Modify</button>
+        <button class="layui-btn" onclick="goOptions('{{:questionId}}')">Options</button>
+      </td>
+    </tr>
+  </script>
+  <script>
+    $(document).ready(function() {
+      goList();
+    })
+    
+    function goAdd() {
+      layui.use('layer', function() {
+        var layer = layui.layer;
+        layer.open({
+          type : 2,
+          id : 'create',
+          title : 'New Question',
+          content : '/html/assessment/question/create.html',
+          area : [ '700px', '500px' ],
+          shade : 0.5,
+          closeBtn : false
+        });
+      });
+    }
+    
+    function goBack() {
+      jump('/html/assessment/questionnaire/list.html');
+    }
+    
+    function goList() {
+      var id = localStorage.getItem('currentQuestionnaireId');
+      $.ajax({
+        async : false,
+        type : 'GET',
+        url : '/question/list/' + id,
+        success : function(data) {
+          var questionList = $('#questionList');
+          var questions = $.templates('#questions');
+          questionList.append(questions.render(data));
+        }
+      });
+    }
+    
+    function goOptions(id) {
+      localStorage.setItem('currentQuestionId', id);
+      jump('/html/assessment/option/list.html');
+    }
+  
+  </script>
+</body>
+</html>
