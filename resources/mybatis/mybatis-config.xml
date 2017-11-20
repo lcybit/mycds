@@ -16,5 +16,6 @@
     <typeAlias type="com.jefflee.entity.Option" alias="Option" />
     <typeAlias type="com.jefflee.entity.Question" alias="Question" />
     <typeAlias type="com.jefflee.entity.Result" alias="Result" />
+    <typeAlias type="com.jefflee.entity.Test" alias="Test" />
   </typeAliases>
 </configuration>

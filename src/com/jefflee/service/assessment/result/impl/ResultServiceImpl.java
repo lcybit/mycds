@@ -14,11 +14,13 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.jefflee.dto.ResultDto;
+import com.jefflee.dto.TestDto;
 import com.jefflee.entity.Result;
 import com.jefflee.service.assessment.question.QuestionService;
 import com.jefflee.service.assessment.result.ResultService;
 import com.jefflee.service.base.impl.BaseServiceImpl;
 import com.jefflee.service.relationship.contains.ContainsService;
+import com.jefflee.service.screening.TestService;
 import com.jefflee.util.BeanUtil;
 import com.jefflee.util.DatabaseUtil;
 import com.jefflee.util.NumberUtil;
@@ -30,6 +32,8 @@ public class ResultServiceImpl extends BaseServiceImpl<ResultDto, Result, String
 	private QuestionService questionService;
 	@Resource(name = "containsService")
 	private ContainsService containsService;
+	@Resource(name = "testService")
+	private TestService testService;
 
 	public ResultServiceImpl() {
 		mapperName = "ResultMapper";
@@ -106,6 +110,8 @@ public class ResultServiceImpl extends BaseServiceImpl<ResultDto, Result, String
 		Map<String, Double> avgRiskData = average(resultDtoList);
 		assessResult.put("avgRiskData", avgRiskData);
 		assessResult.put("totalRisk", calculate(riskData));
+		List<TestDto> recommondedTestDtoList = testService.findRecommondedList(resultId);
+		assessResult.put("recommondedTestList", recommondedTestDtoList);
 		return assessResult;
 	}
 
