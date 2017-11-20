@@ -33,8 +33,8 @@ public class ContainsServiceImpl extends BaseServiceImpl<ContainsDto, Contains, 
 	}
 
 	@Override
-	public List<ContainsDto> findListByParentId(String componentId) throws Exception {
-		List<Contains> containsList = baseDao.selectList(mapperName + ".selectListByParentId", componentId);
+	public List<ContainsDto> findListByParentId(String parentId) throws Exception {
+		List<Contains> containsList = baseDao.selectList(mapperName + ".selectListByParentId", parentId);
 		List<ContainsDto> containsDtoList = new ArrayList<ContainsDto>();
 		for (Contains contains : containsList) {
 			ContainsDto containsDto = new ContainsDto();
@@ -42,6 +42,17 @@ public class ContainsServiceImpl extends BaseServiceImpl<ContainsDto, Contains, 
 			containsDtoList.add(containsDto);
 		}
 		return containsDtoList;
+	}
+
+	@Override
+	public int findMaxChildNo(String parentId) throws Exception {
+		List<Contains> containsList = baseDao.selectList(mapperName + ".selectListByParentId", parentId);
+		int maxChildNo = -1;
+		for (Contains contains : containsList) {
+			int childNo = contains.getChildNo();
+			maxChildNo = childNo > maxChildNo ? childNo : maxChildNo;
+		}
+		return maxChildNo;
 	}
 
 }

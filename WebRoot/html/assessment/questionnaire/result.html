@@ -10,7 +10,8 @@
 </head>
 <body>
   <div class="layui-container" style="width:100%; height:100%">
-    <button id="convert" class="layui-btn" onclick="goConvert()">Convert</button>
+    <div id="conclusionText"></div>
+    <button class="layui-btn" type="button" id="convert" onclick="goConvert()">Itemization</button>
     <div id="riskChart" style="width:100%; height:500px"></div>
   </div>
   <script id="conclusion" type="text/x-jsrender">
@@ -31,22 +32,17 @@
         url : '/result/assess/' + resultId,
         contentType : 'application/json',
         success : function(result) {
-          console.log(result);
-          var conclusion = $.templates('#conclusion');
-          $('.layui-container').append(conclusion.render(result));
+          $('#conclusionText').html($.templates('#conclusion').render(result));
           if(status === 'person') {
-            displayByPerson(result.riskData);
+            displayByPerson(result.riskData, result.avgRiskData);
           } else if(status === 'risk') {
-            displayByRisk(result.riskData);
+            displayByRisk(result.riskData, result.avgRiskData);
           }
-        },
-        error : function(xhr, resp, text) {
-          console.log(xhr, resp, text);
         }
       });
     }
     
-    function displayByPerson(riskData) {
+    function displayByPerson(riskData, avgRiskData) {
       var legendData = [];
       var series = [];
       for (var risk in riskData) {
@@ -54,14 +50,15 @@
         var serie = {
           name: risk,
           type: 'bar',
-          stack: 'TotalValue',
+          barWidth: 20,
+          stack: 'TotalRisk',
           label: {
             normal: {
               show: true,
               position: 'insideRight'
             }
           },
-          data: [riskData[risk]]
+          data: [riskData[risk], avgRiskData[risk]]
         };
         series.push(serie);
       }
@@ -81,12 +78,12 @@
           bottom: '3%',
           containLabel: true
         },
-        xAxis:  {
-          type: 'category',
-          data: ['You']
-        },
-        yAxis: {
+        xAxis: {
           type: 'value'
+        },
+        yAxis:  {
+          type: 'category',
+          data: ['You', 'Avg']
         },
         series: series
       };
@@ -94,12 +91,14 @@
       window.onresize = riskChart.resize;
     }
 
-    function displayByRisk(riskData) {
-      var xAxisData = [];
+    function displayByRisk(riskData, avgRiskData) {
+      var yAxisData = [];
       var seriesData = [];
+      var avgSeriesData = [];
       for (var risk in riskData) {
-        xAxisData.push(risk);
+        yAxisData.push(risk);
         seriesData.push(riskData[risk]);
+        avgSeriesData.push(avgRiskData[risk]);
       }
       var option = {
         tooltip: {
@@ -109,7 +108,7 @@
           }
         },
         legend: {
-          data: ['You']
+          data: ['You', 'Avg']
         },
         grid: {
           left: '3%',
@@ -117,17 +116,16 @@
           bottom: '3%',
           containLabel: true
         },
-        xAxis:  {
-          type: 'category',
-          data: xAxisData
-        },
-        yAxis: {
+        xAxis: {
           type: 'value'
+        },
+        yAxis:  {
+          type: 'category',
+          data: yAxisData
         },
         series: [{
           name: 'You',
           type: 'bar',
-          stack: 'TotalValue',
           label: {
             normal: {
               show: true,
@@ -135,6 +133,17 @@
             }
           },
           data: seriesData
+        },
+        {
+          name: 'Avg',
+          type: 'bar',
+          label: {
+            normal: {
+              show: true,
+              position: 'insideRight'
+            }
+          },
+          data: avgSeriesData        
         }]
       };
       riskChart.setOption(option, true);
@@ -143,8 +152,10 @@
 		
     function goConvert() {
       if(status === 'person') {
+        $('#convert').text('Accumulation');
         status = 'risk';
       } else if(status === 'risk') {
+        $('#convert').text('Itemization');
         status = 'person';
       }
       goChart(resultId);

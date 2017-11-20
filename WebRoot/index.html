@@ -3,12 +3,12 @@
 <head>
 <title>MyCDS</title>
 <link rel="stylesheet" href="/plugin/layui/css/layui.css">
+<script src="/plugin/jquery/jquery.js"></script>
+<script src="/plugin/layui/layui.all.js"></script>
 </head>
 <body>
   <div id="navigation" style="width:200px; float:left;"></div>
   <div id="main" style="width:auto; margin-left:200px;"></div>
-  <script src="/plugin/jquery/jquery.js"></script>
-  <script src="/plugin/layui/layui.all.js"></script>
   <script>
     $(document).ready(function() {
       $('#navigation').load('/html/common/navigation.html .layui-side');
@@ -22,14 +22,6 @@
       $('#main').empty();
       $('#main').load(url);
     }  
-  
-    function jump(url, data) {
-      $.ajaxSetup({
-        cache : false
-      });
-      $('#main').empty();
-      $('#main').load(url, data);
-    }
   </script>
 </body>
 </html>

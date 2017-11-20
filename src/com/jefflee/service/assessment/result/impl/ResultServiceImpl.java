@@ -1,12 +1,10 @@
 package com.jefflee.service.assessment.result.impl;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
@@ -23,6 +21,7 @@ import com.jefflee.service.base.impl.BaseServiceImpl;
 import com.jefflee.service.relationship.contains.ContainsService;
 import com.jefflee.util.BeanUtil;
 import com.jefflee.util.DatabaseUtil;
+import com.jefflee.util.NumberUtil;
 
 @Service("resultService")
 public class ResultServiceImpl extends BaseServiceImpl<ResultDto, Result, String> implements ResultService {
@@ -73,6 +72,18 @@ public class ResultServiceImpl extends BaseServiceImpl<ResultDto, Result, String
 	}
 
 	@Override
+	public List<ResultDto> findListByQuestionnaireId(String questionnaireId) throws Exception {
+		List<Result> resultList = baseDao.selectList(mapperName + ".selectListByQuestionnaireId", questionnaireId);
+		List<ResultDto> resultDtoList = new ArrayList<ResultDto>();
+		for (Result result : resultList) {
+			ResultDto resultDto = new ResultDto();
+			BeanUtil.copyProperties(result, resultDto);
+			resultDtoList.add(resultDto);
+		}
+		return resultDtoList;
+	}
+
+	@Override
 	public List<ResultDto> findListBySessionId(String sessionId) throws Exception {
 		List<Result> resultList = baseDao.selectList(mapperName + ".selectListBySessionId", sessionId);
 		List<ResultDto> resultDtoList = new ArrayList<ResultDto>();
@@ -87,9 +98,13 @@ public class ResultServiceImpl extends BaseServiceImpl<ResultDto, Result, String
 	@Override
 	public Map<String, Object> assess(String resultId) throws Exception {
 		ResultDto resultDto = findById(resultId);
+		String questionnaireId = resultDto.getQuestionnaireId();
+		List<ResultDto> resultDtoList = findListByQuestionnaireId(questionnaireId);
 		Map<String, Object> assessResult = new HashMap<String, Object>();
 		Map<String, Double> riskData = option2Data(resultDto);
 		assessResult.put("riskData", riskData);
+		Map<String, Double> avgRiskData = average(resultDtoList);
+		assessResult.put("avgRiskData", avgRiskData);
 		assessResult.put("totalRisk", calculate(riskData));
 		return assessResult;
 	}
@@ -99,7 +114,22 @@ public class ResultServiceImpl extends BaseServiceImpl<ResultDto, Result, String
 		for (Double riskValue : riskData.values()) {
 			totalRisk += riskValue;
 		}
-		return totalRisk;
+		return NumberUtil.reserveTwo(totalRisk);
+	}
+
+	private Map<String, Double> average(List<ResultDto> resultDtoList) {
+		Map<String, Double> avgRiskData = option2Data(resultDtoList.get(0));
+		for (int i = 1; i < resultDtoList.size(); i++) {
+			ResultDto resultDto = resultDtoList.get(i);
+			Map<String, Double> riskData = option2Data(resultDto);
+			for (String key : riskData.keySet()) {
+				avgRiskData.put(key, (riskData.get(key) + i * avgRiskData.get(key)) / (i + 1));
+			}
+		}
+		for (String key : avgRiskData.keySet()) {
+			avgRiskData.put(key, NumberUtil.reserveTwo(avgRiskData.get(key)));
+		}
+		return avgRiskData;
 	}
 
 	private Map<String, Double> option2Data(ResultDto resultDto) {
@@ -145,9 +175,8 @@ public class ResultServiceImpl extends BaseServiceImpl<ResultDto, Result, String
 		riskData.put("DairyConsumption", dairyConsumptionRisk);
 		riskData.put("MilkConsumption", milkConsumptionRisk);
 
-		DecimalFormat df = new DecimalFormat("#.00");
-		for (Entry<String, Double> risk : riskData.entrySet()) {
-			riskData.put(risk.getKey(), Double.valueOf(df.format(Math.log(risk.getValue()))));
+		for (String key : riskData.keySet()) {
+			riskData.put(key, NumberUtil.reserveTwo(Math.log(riskData.get(key))));
 		}
 		return riskData;
 	}

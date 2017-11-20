@@ -11,4 +11,6 @@ public interface ContainsService extends BaseService<ContainsDto, String> {
 
 	public ContainsDto create(ContainsDto containsDto) throws Exception;
 
+	int findMaxChildNo(String parentId) throws Exception;
+
 }

@@ -35,9 +35,10 @@ public class QuestionServiceImpl extends BaseServiceImpl<QuestionDto, Question, 
 		// Create parent group relationship
 		ContainsDto parentContainsDto = new ContainsDto();
 		String questionId = DatabaseUtil.gnr32Uuid();
-		parentContainsDto.setParentId(questionDto.getQuestionnaireId());
+		String questionnaireId = questionDto.getQuestionnaireId();
+		parentContainsDto.setParentId(questionnaireId);
 		parentContainsDto.setChildId(questionId);
-		parentContainsDto.setChildNo(0);
+		parentContainsDto.setChildNo(containsService.findMaxChildNo(questionnaireId) + 1);
 		parentContainsDto = containsService.create(parentContainsDto);
 		if (null == parentContainsDto) {
 			return null;
@@ -48,6 +49,17 @@ public class QuestionServiceImpl extends BaseServiceImpl<QuestionDto, Question, 
 		question.setQuestionId(questionId);
 		question.setStatus("created");
 		if (1 == baseDao.insert(mapperName + ".insert", question)) {
+			BeanUtil.copyPropertiesIgnoreNull(question, questionDto);
+			return questionDto;
+		}
+		return null;
+	}
+
+	@Override
+	public QuestionDto modify(QuestionDto questionDto) throws Exception {
+		Question question = baseDao.selectOne(mapperName + ".selectOne", questionDto.getQuestionId());
+		BeanUtil.copyPropertiesIgnoreNull(questionDto, question);
+		if (1 == baseDao.update(mapperName + ".update", question)) {
 			BeanUtil.copyPropertiesIgnoreNull(question, questionDto);
 			return questionDto;
 		}

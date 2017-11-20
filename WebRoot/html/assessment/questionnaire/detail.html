@@ -11,7 +11,7 @@
 <body>
   <div class="layui-container" style="margin-top: 30px; width:100%;">
     <form id="questionnaireDetail" class="layui-form" method="post">
-      <div class="layui-form-item">
+      <div class="layui-form-item" hidden="hidden">
         <div class="layui-form-row">Questionnaire ID:</div>
         <div class="layui-input-block">
           <input class="layui-input" name="questionnaireId" id="questionnaireId" type="text" />
@@ -27,9 +27,9 @@
     </div>
 	{{for questionList tmpl="#questions" /}}
     <div class="layui-input-inline">
-      <button class="layui-btn" type="button" onclick="goSubmit()">Submit</button>
-      <button class="layui-btn" type="button" onclick="goReset()">Reset</button>
       <button class="layui-btn" type="button" onclick="goBack()">Back</button>
+      <button class="layui-btn" type="button" onclick="goReset()">Reset</button>
+      <button class="layui-btn" type="button" onclick="goSubmit()">Submit</button>
     </div>
   </script>
   <script id="questions" type="text/x-jsrender">
@@ -67,10 +67,8 @@
         async : false,
         type : 'GET',
         url : '/questionnaire/detail/' + id,
-        success : function(data) {
-          var questionnaireDetail = $('#questionnaireDetail');
-          var questionnaire = $.templates('#questionnaire');
-          questionnaireDetail.append(questionnaire.render(data));
+        success : function(questionnaireDetail) {
+          $('#questionnaireDetail').append($.templates('#questionnaire').render(questionnaireDetail));
         }
       });
     }
@@ -84,14 +82,8 @@
         contentType : 'application/json',
         data : JSON.stringify($('#questionnaireDetail').serializeJSON()),
         success : function(result) {
-          console.log(result);
           localStorage.setItem('currentResultId', result.resultId);
-          jump('/html/assessment/questionnaire/chart.html')
-          return false;
-        },
-        error : function(xhr, resp, text) {
-          console.log(xhr, resp, text);
-          return false;
+          jump('/html/assessment/questionnaire/result.html')
         }
       });
     }

@@ -7,12 +7,14 @@ import com.jefflee.service.base.BaseService;
 
 public interface QuestionnaireService extends BaseService<QuestionnaireDto, String> {
 
-	public QuestionnaireDto create(QuestionnaireDto questionnaireDto) throws Exception;
+	QuestionnaireDto create(QuestionnaireDto questionnaireDto) throws Exception;
 
-	public QuestionnaireDto findById(String questionnaireId) throws Exception;
+	QuestionnaireDto findById(String questionnaireId) throws Exception;
 
-	public QuestionnaireDto findDetailById(String questionnaireId) throws Exception;
+	QuestionnaireDto findDetailById(String questionnaireId) throws Exception;
 
-	public List<QuestionnaireDto> findList() throws Exception;
+	List<QuestionnaireDto> findList() throws Exception;
+
+	QuestionnaireDto modify(QuestionnaireDto questionnaireDto) throws Exception;
 
 }

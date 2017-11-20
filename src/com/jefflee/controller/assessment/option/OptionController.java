@@ -26,10 +26,22 @@ public class OptionController {
 		return optionDto;
 	}
 
-	@RequestMapping(value = "/list/{id}", method = RequestMethod.GET)
-	public List<OptionDto> list(@PathVariable("id") String parentId) throws Exception {
-		List<OptionDto> optionDtoList = optionService.findListByParentId(parentId);
+	@RequestMapping(value = "/modify", method = RequestMethod.POST)
+	public OptionDto modify(@RequestBody OptionDto optionDto) throws Exception {
+		optionDto = optionService.modify(optionDto);
+		return optionDto;
+	}
+
+	@RequestMapping(value = "/list/{questionId}", method = RequestMethod.GET)
+	public List<OptionDto> list(@PathVariable("questionId") String questionId) throws Exception {
+		List<OptionDto> optionDtoList = optionService.findListByParentId(questionId);
 		return optionDtoList;
+	}
+
+	@RequestMapping(value = "/find/{optionId}", method = RequestMethod.GET)
+	public OptionDto find(@PathVariable("optionId") String optionId) throws Exception {
+		OptionDto optionDto = optionService.findById(optionId);
+		return optionDto;
 	}
 
 }

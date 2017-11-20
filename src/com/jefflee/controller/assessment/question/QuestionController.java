@@ -26,10 +26,22 @@ public class QuestionController {
 		return questionDto;
 	}
 
-	@RequestMapping(value = "/list/{id}", method = RequestMethod.GET)
-	public List<QuestionDto> list(@PathVariable("id") String parentId) throws Exception {
-		List<QuestionDto> questionDtoList = questionService.findListByParentId(parentId);
+	@RequestMapping(value = "/modify", method = RequestMethod.POST)
+	public QuestionDto modify(@RequestBody QuestionDto questionDto) throws Exception {
+		questionDto = questionService.modify(questionDto);
+		return questionDto;
+	}
+
+	@RequestMapping(value = "/list/{questionnaireId}", method = RequestMethod.GET)
+	public List<QuestionDto> list(@PathVariable("questionnaireId") String questionnaireId) throws Exception {
+		List<QuestionDto> questionDtoList = questionService.findListByParentId(questionnaireId);
 		return questionDtoList;
+	}
+
+	@RequestMapping(value = "/find/{questionId}", method = RequestMethod.GET)
+	public QuestionDto find(@PathVariable("questionId") String questionId) throws Exception {
+		QuestionDto questionDto = questionService.findById(questionId);
+		return questionDto;
 	}
 
 }

@@ -13,11 +13,11 @@
     <table class="layui-table">
       <thead>
         <tr>
-          <th>option ID</th>
+          <th hidden="hidden">option ID</th>
           <th>Type</th>
           <th>Title</th>
           <th>Value</th>
-          <th>Status</th>
+          <th hidden="hidden">Status</th>
           <th>Operation</th>
         </tr>
       </thead>
@@ -31,11 +31,11 @@
   </div>
   <script id="options" type="text/x-jsrender">
     <tr>
-      <td>{{:optionId}}</td>
+      <td hidden="hidden">{{:optionId}}</td>
       <td>{{:type}}</td>
       <td>{{:title}}</td>
       <td>{{:value}}</td>
-      <td>{{:status}}</td>
+      <td hidden="hidden">{{:status}}</td>
       <td>
         <button class="layui-btn" onclick="goModify('{{:optionId}}')">Modify</button>
       </td>
@@ -47,17 +47,47 @@
     })
     
     function goAdd() {
+      localStorage.setItem('currentAction', 'create');
       layui.use('layer', function() {
         var layer = layui.layer;
         layer.open({
           type : 2,
           id : 'create',
-          title : 'New Option',
-          content : '/html/assessment/option/create.html',
+          title : 'Option',
+          content : '/html/assessment/option/edit.html',
           area : [ '700px', '500px' ],
           shade : 0.5,
           closeBtn : false
         });
+      });
+    }
+
+    function goModify(optionId) {
+      localStorage.setItem('currentAction', 'modify');
+      localStorage.setItem('currentOptionId', optionId);
+      layui.use('layer', function() {
+        var layer = layui.layer;
+        layer.open({
+          type : 2,
+          id : 'modify',
+          title : 'Option',
+          content : '/html/assessment/option/edit.html',
+          area : [ '700px', '500px' ],
+          shade : 0.5,
+          closeBtn : false,
+        });
+      });
+    }    
+
+    function goList() {
+      var id = localStorage.getItem('currentQuestionId');
+      $.ajax({
+        async : false,
+        type : 'GET',
+        url : '/option/list/' + id,
+        success : function(optionList) {
+          $('#optionList').html($.templates('#options').render(optionList));
+        }
       });
     }
     
@@ -65,19 +95,6 @@
       jump('/html/assessment/question/list.html');
     }
     
-    function goList() {
-      var id = localStorage.getItem('currentQuestionId');
-      $.ajax({
-        async : false,
-        type : 'GET',
-        url : '/option/list/' + id,
-        success : function(data) {
-          var optionList = $('#optionList');
-          var options = $.templates('#options');
-          optionList.append(options.render(data));
-        }
-      });
-    }
   </script>
 </body>
 </html>

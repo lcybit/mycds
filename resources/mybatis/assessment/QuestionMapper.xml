@@ -58,7 +58,7 @@
 	<include refid="eqnOthers"/>
   </sql>
   <sql id="eqnWhere">
-    <include refid="eqn0"/>
+    <include refid="eqnPrimary"/>
   </sql>
 
   <insert id="insert" parameterType="Question">
@@ -91,7 +91,7 @@
     UPDATE
     <include refid="table"/>
     SET
-    <include refid="eqnAll"/>
+    <include refid="eqnOthers"/>
     WHERE
     <include refid="eqnWhere"/>
   </update>

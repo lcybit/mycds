@@ -137,6 +137,9 @@
   <sql id="eqnWhere">
     <include refid="eqn0"/>
   </sql>
+  <sql id="eqnQuestionnaireId">
+    <include refid="eqn1"/>
+  </sql>
   <sql id="eqnSessionId">
     <include refid="eqn2"/>
   </sql>
@@ -192,6 +195,15 @@
     <include refid="table"/>
   </select>
   
+  <select id="selectListByQuestionnaireId" parameterType="String" resultType="Result">
+    SELECT
+    <include refid="attrAll"/>
+    FROM
+    <include refid="table"/>
+    WHERE
+    <include refid="eqnQuestionnaireId"/>
+  </select>
+
   <select id="selectListBySessionId" parameterType="String" resultType="Result">
     SELECT
     <include refid="attrAll"/>

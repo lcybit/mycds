@@ -13,11 +13,11 @@
     <table class="layui-table">
       <thead>
         <tr>
-          <th>Questionnaire ID</th>
+          <th hidden="hidden">Questionnaire ID</th>
           <th>Theme</th>
           <th>Title</th>
-          <th>Style</th>
-          <th>Status</th>
+          <th hidden="hidden">Style</th>
+          <th hidden="hidden">Status</th>
           <th>Operation</th>
         </tr>
       </thead>
@@ -26,20 +26,20 @@
     </table>
     <div class="layui-input-inline">
       <button class="layui-btn" onclick="goBack()">Back</button>
-      <button class="layui-btn" onclick="goAdd()">Add</button>
+      <button class="layui-btn" onclick="goAdd()" style="display:none">Add</button>
     </div>
   </div>
   <script id="questionnaires" type="text/x-jsrender">
     <tr>
-      <td>{{:questionnaireId}}</td>
+      <td hidden="hidden">{{:questionnaireId}}</td>
       <td>{{:theme}}</td>
       <td>{{:title}}</td>
-      <td>{{:style}}</td>
-      <td>{{:status}}</td>
+      <td hidden="hidden">{{:style}}</td>
+      <td hidden="hidden">{{:status}}</td>
       <td>
         <button class="layui-btn" onclick="goDetail('{{:questionnaireId}}')">Detail</button>
-        <button class="layui-btn" onclick="goModify('{{:questionnaireId}}')">Modify</button>
-        <button class="layui-btn" onclick="goQuestions('{{:questionnaireId}}')">Questions</button>
+        <button class="layui-btn" onclick="goModify('{{:questionnaireId}}')" style="display:none">Modify</button>
+        <button class="layui-btn" onclick="goQuestions('{{:questionnaireId}}')" style="display:none">Questions</button>
       </td>
     </tr>
   </script>
@@ -49,13 +49,14 @@
     });
   
     function goAdd() {
+      localStorage.setItem('currentAction', 'create');
       layui.use('layer', function() {
         var layer = layui.layer;
         layer.open({
           type : 2,
           id : 'create',
-          title : 'New Questionnaire',
-          content : '/html/assessment/questionnaire/create.html',
+          title : 'Questionnaire',
+          content : '/html/assessment/questionnaire/edit.html',
           area : [ '700px', '500px' ],
           shade : 0.5,
           closeBtn : false
@@ -63,19 +64,30 @@
       });
     }
     
-    function goBack() {
-      jump('/html/common/home.html');
+    function goModify(questionnaireId) {
+      localStorage.setItem('currentAction', 'modify');
+      localStorage.setItem('currentQuestionnaireId', questionnaireId);
+      layui.use('layer', function() {
+        var layer = layui.layer;
+        layer.open({
+          type : 2,
+          id : 'modify',
+          title : 'Questionnaire',
+          content : '/html/assessment/questionnaire/edit.html',
+          area : [ '700px', '500px' ],
+          shade : 0.5,
+          closeBtn : false,
+        });
+      });
     }
-  
+    
     function goList() {
       $.ajax({
         async : false,
         type : 'GET',
         url : '/questionnaire/list',
-        success : function(data) {
-          var questionnaireList = $('#questionnaireList');
-          var questionnaires = $.templates('#questionnaires');
-          questionnaireList.append(questionnaires.render(data));
+        success : function(questionnaireList) {
+          $('#questionnaireList').html($.templates('#questionnaires').render(questionnaireList));
         }
       });
     }
@@ -88,6 +100,10 @@
     function goQuestions(id) {
       localStorage.setItem('currentQuestionnaireId', id);
       jump('/html/assessment/question/list.html');
+    }
+  
+    function goBack() {
+      jump('/html/common/home.html');
     }
   
   </script>

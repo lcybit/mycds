@@ -33,20 +33,20 @@ public class ResultController {
 		return resultDtoList;
 	}
 
-	@RequestMapping(value = "/list/{id}", method = RequestMethod.GET)
-	public List<ResultDto> list(@PathVariable("id") String sessionId) throws Exception {
-		List<ResultDto> resultDtoList = resultService.findListBySessionId(sessionId);
+	@RequestMapping(value = "/list/{questionnaireId}", method = RequestMethod.GET)
+	public List<ResultDto> list(@PathVariable("questionnaireId") String questionnaireId) throws Exception {
+		List<ResultDto> resultDtoList = resultService.findListByQuestionnaireId(questionnaireId);
 		return resultDtoList;
 	}
 
-	@RequestMapping(value = "/find/{id}", method = RequestMethod.GET)
-	public ResultDto find(@PathVariable("id") String resultId) throws Exception {
+	@RequestMapping(value = "/find/{resultId}", method = RequestMethod.GET)
+	public ResultDto find(@PathVariable("resultId") String resultId) throws Exception {
 		ResultDto resultDto = resultService.findById(resultId);
 		return resultDto;
 	}
 
-	@RequestMapping(value = "/assess/{id}", method = RequestMethod.GET)
-	public Map<String, Object> assess(@PathVariable("id") String resultId) throws Exception {
+	@RequestMapping(value = "/assess/{resultId}", method = RequestMethod.GET)
+	public Map<String, Object> assess(@PathVariable("resultId") String resultId) throws Exception {
 		Map<String, Object> result = resultService.assess(resultId);
 		return result;
 	}

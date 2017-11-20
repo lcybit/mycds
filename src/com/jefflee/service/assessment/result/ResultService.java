@@ -8,14 +8,16 @@ import com.jefflee.service.base.BaseService;
 
 public interface ResultService extends BaseService<ResultDto, String> {
 
-	public ResultDto create(ResultDto resultDto) throws Exception;
+	ResultDto create(ResultDto resultDto) throws Exception;
 
-	public ResultDto findById(String resultId) throws Exception;
+	ResultDto findById(String resultId) throws Exception;
 
-	public List<ResultDto> findList() throws Exception;
+	List<ResultDto> findList() throws Exception;
 
 	List<ResultDto> findListBySessionId(String sessionId) throws Exception;
 
 	Map<String, Object> assess(String resultId) throws Exception;
+
+	List<ResultDto> findListByQuestionnaireId(String questionnaireId) throws Exception;
 
 }

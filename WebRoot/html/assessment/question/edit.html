@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Create Question</title>
+<link rel="stylesheet" href="/plugin/layui/css/layui.css" />
+<script src="/plugin/jquery/jquery.js"></script>
+<script src="/plugin/jquery/jquery.serializejson.js"></script>
+<script src="/plugin/jsrender/jsrender.js"></script>
+<script src="/plugin/layui/layui.all.js"></script>
+</head>
+<body>
+  <div class="layui-container" style="margin-top:30px;">
+    <form class="layui-form" id="question" method="post">
+      <div class="layui-form-item" hidden="hidden">
+        <label class="layui-form-label">Questionnaire ID:</label>
+        <div class="layui-input-block">
+          <input class="layui-input" name="questionnaireId" id="questionnaireId" type="text" />
+        </div>
+      </div>
+      <div class="layui-form-item" hidden="hidden">
+        <label class="layui-form-label">Question ID:</label>
+        <div class="layui-input-block">
+          <input class="layui-input" name="questionId" id="questionId" type="text" />
+        </div>
+      </div>
+      <div class="layui-form-item">
+        <label class="layui-form-label">Title:</label>
+        <div class="layui-input-block">
+          <input class="layui-input" name="title" id="title" type="text" />
+        </div>
+      </div>
+      <div class="layui-form-item">
+        <div class="layui-input-block">
+          <button class="layui-btn" type="button" id="saveButton">Save</button>
+          <button class="layui-btn" type="button" onclick="goCancel()">Cancel</button>
+        </div>
+      </div>
+    </form>
+  </div>
+  <script>
+    $(document).ready(function() {
+      var action = localStorage.getItem('currentAction');
+      if (action === 'create') {
+        var questionnaireId = localStorage.getItem('currentQuestionnaireId');
+        $('#questionnaireId').attr('value', questionnaireId);
+      } else if (action === 'modify') {
+        var questionId = localStorage.getItem('currentQuestionId');
+        $('#questionId').attr('value', questionId);
+        $.ajax({
+          async : false,
+          type : 'GET',
+          url : '/question/find/' + questionId,
+          success : function(question) {
+            $('#title').attr('value', question.title);
+          }
+        });
+      }
+      $('#saveButton').attr('onclick', 'goSave("' + action + '")');
+    });
+  
+    function goSave(action) {
+      $.ajax({
+        async : false,
+        url : '/question/' + action,
+        type : 'POST',
+        dataType : 'json',
+        contentType : 'application/json',
+        data : JSON.stringify($('#question').serializeJSON()),
+        success : function(question) {
+          var index = parent.layer.getFrameIndex(window.name);
+          parent.layer.close(index);
+          parent.goList();
+        }
+      });
+    }
+    
+    function goCancel() {
+      var index = parent.layer.getFrameIndex(window.name);
+      parent.layer.close(index);
+    }
+  </script>
+</body>
+</html>

@@ -10,11 +10,17 @@
 </head>
 <body>
   <div class="layui-container" style="margin-top:30px;">
-    <form class="layui-form" id="optionDto" method="post">
-      <div class="layui-form-item">
+    <form class="layui-form" id="option" method="post">
+      <div class="layui-form-item" hidden="hidden">
         <label class="layui-form-label">Question ID:</label>
         <div class="layui-input-block">
           <input class="layui-input" name="questionId" id="questionId" type="text" />
+        </div>
+      </div>
+      <div class="layui-form-item" hidden="hidden">
+        <label class="layui-form-label">Option ID:</label>
+        <div class="layui-input-block">
+          <input class="layui-input" name="optionId" id="optionId" type="text" />
         </div>
       </div>
       <div class="layui-form-item">
@@ -28,18 +34,18 @@
       <div class="layui-form-item">
         <label class="layui-form-label">Title:</label>
         <div class="layui-input-block">
-          <input class="layui-input" name="title" type="text" />
+          <input class="layui-input" name="title" id="title" type="text" />
         </div>
       </div>
       <div class="layui-form-item">
         <label class="layui-form-label">Value:</label>
         <div class="layui-input-block">
-          <input class="layui-input" name="value" type="text" />
+          <input class="layui-input" name="value" id="value" type="text" />
         </div>
       </div>
       <div class="layui-form-item">
         <div class="layui-input-block">
-          <button class="layui-btn" type="submit" onclick="goCreate()">Create</button>
+          <button class="layui-btn" type="button" id="saveButton">Save</button>
           <button class="layui-btn" type="button" onclick="goCancel()">Cancel</button>
         </div>
       </div>
@@ -47,32 +53,47 @@
   </div>
   <script>
     $(document).ready(function() {
-      var questionId = localStorage.getItem('currentQuestionId');
-      $('#questionId').attr('value', questionId);
+      var action = localStorage.getItem('currentAction');
+      if (action === 'create') {
+        var questionId = localStorage.getItem('currentQuestionId');
+        $('#questionId').attr('value', questionId);
+      } else if (action === 'modify') {
+        var optionId = localStorage.getItem('currentOptionId');
+        $('#optionId').attr('value', optionId);
+        $.ajax({
+          async : false,
+          type : 'GET',
+          url : '/option/find/' + optionId,
+          success : function(option) {
+            $('[name="type"][value="'+ option.type + '"]').attr('checked', 'checked');
+            $('#title').attr('value', option.title);
+            $('#value').attr('value', option.value);
+          }
+        });
+      }
+      $('#saveButton').attr('onclick', 'goSave("' + action + '")');
+      layui.use('form', function() {
+        layui.form.render();
+      });
     });
   
-    var index = parent.layer.getFrameIndex(window.name);
-    function goCreate() {
+    function goSave(action) {
       $.ajax({
         async : false,
-        url : '/option/create',
+        url : '/option/' + action,
         type : 'POST',
         dataType : 'json',
         contentType : 'application/json',
-        data : JSON.stringify($('#optionDto').serializeJSON()),
+        data : JSON.stringify($('#option').serializeJSON()),
         success : function(result) {
-          console.log(result);
-          return false;
-        },
-        error : function(xhr, resp, text) {
-          console.log(xhr, resp, text);
-          return false;
+          var index = parent.layer.getFrameIndex(window.name);
+          parent.layer.close(index);
+          parent.goList();
         }
       });
-      parent.layer.close(index);
-      parent.goList();
     }
     function goCancel() {
+      var index = parent.layer.getFrameIndex(window.name);
       parent.layer.close(index);
     }
   </script>

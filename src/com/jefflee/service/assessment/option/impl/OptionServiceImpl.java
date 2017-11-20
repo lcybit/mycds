@@ -76,4 +76,14 @@ public class OptionServiceImpl extends BaseServiceImpl<OptionDto, Option, String
 		return optionDtoList;
 	}
 
+	@Override
+	public OptionDto modify(OptionDto optionDto) throws Exception {
+		Option option = new Option();
+		BeanUtil.copyProperties(optionDto, option);
+		if (1 == baseDao.update(mapperName + ".update", option)) {
+			return optionDto;
+		}
+		return null;
+	}
+
 }

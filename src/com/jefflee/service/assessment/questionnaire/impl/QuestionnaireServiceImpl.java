@@ -47,6 +47,16 @@ public class QuestionnaireServiceImpl extends BaseServiceImpl<QuestionnaireDto, 
 	}
 
 	@Override
+	public QuestionnaireDto modify(QuestionnaireDto questionnaireDto) throws Exception {
+		Questionnaire questionnaire = new Questionnaire();
+		BeanUtil.copyProperties(questionnaireDto, questionnaire);
+		if (1 == baseDao.update(mapperName + ".update", questionnaire)) {
+			return questionnaireDto;
+		}
+		return null;
+	}
+
+	@Override
 	public QuestionnaireDto findDetailById(String questionnaireId) throws Exception {
 		QuestionnaireDto questionnaireDto = findById(questionnaireId);
 		List<QuestionDto> questionDtoList = new ArrayList<QuestionDto>();
