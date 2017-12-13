@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-<title>Question List</title>
+<title>List</title>
 <link rel="stylesheet" href="/plugin/layui/css/layui.css" />
 <script src="/plugin/jquery/jquery.js"></script>
 <script src="/plugin/jquery/jquery.serializejson.js"></script>
 <script src="/plugin/jsrender/jsrender.js"></script>
-<script src="/plugin/layui/layui.all.js"></script>
 </head>
+
 <body>
   <div class="layui-container" style="width:100%;">
     <table class="layui-table">
@@ -45,9 +46,9 @@
     $(document).ready(function() {
       goList();
     })
-    
+  
     function goAdd() {
-      localStorage.setItem('currentAction', 'create');
+      sessionStorage.setItem('currentAction', 'create');
       layui.use('layer', function() {
         var layer = layui.layer;
         layer.open({
@@ -61,10 +62,10 @@
         });
       });
     }
-
+  
     function goModify(optionId) {
-      localStorage.setItem('currentAction', 'modify');
-      localStorage.setItem('currentOptionId', optionId);
+      sessionStorage.setItem('currentAction', 'modify');
+      sessionStorage.setItem('currentOptionId', optionId);
       layui.use('layer', function() {
         var layer = layui.layer;
         layer.open({
@@ -77,10 +78,10 @@
           closeBtn : false,
         });
       });
-    }    
-
+    }
+  
     function goList() {
-      var id = localStorage.getItem('currentQuestionId');
+      var id = sessionStorage.getItem('currentQuestionId');
       $.ajax({
         async : false,
         type : 'GET',
@@ -90,11 +91,11 @@
         }
       });
     }
-    
+  
     function goBack() {
       jump('/html/assessment/question/list.html');
     }
-    
   </script>
 </body>
+
 </html>

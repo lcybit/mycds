@@ -1,34 +1,60 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-<title>MyCDS</title>
+<title>Navigation</title>
 <link rel="stylesheet" href="/plugin/layui/css/layui.css" />
 <script src="/plugin/jquery/jquery.js"></script>
 <script src="/plugin/jquery/jquery.serializejson.js"></script>
 <script src="/plugin/jsrender/jsrender.js"></script>
-<script src="/plugin/layui/layui.all.js"></script>
 </head>
+
 <body>
   <div class="layui-side layui-bg-black" style="float:left;">
     <div class="layui-side-scroll">
-      <ul class="layui-nav layui-nav-tree">
+      <ul class="layui-nav layui-nav-tree layui-nav-side">
         <li class="layui-nav-item" id="home">
-          <a onclick="jump('/html/common/home.html')" style="cursor:pointer">Home</a>
+          <a href="javascript:;" onclick="jump('/html/common/home.html')" style="cursor:pointer">Home</a>
         </li>
         <li class="layui-nav-item" id="crcRiskAssessment">
-          <a onclick="jump('/html/assessment/questionnaire/list.html')" style="cursor:pointer">CRC Risk Assessment</a>
-        </li>
-        <li class="layui-nav-item" id="scheduleAnAppointment">
-          <a onclick="jump('/html/common/home.html')" style="cursor:pointer">Schedule an Appointment</a>
+          <a href="javascript:;" style="cursor:pointer">CRC Risk Assessment</a>
+          <dl class="layui-nav-child">
+            <dd id="fillInQuestionnaire">
+              <a href="javascript:;" onclick="jump('/html/assessment/questionnaire/detail.html')" style="cursor:pointer">Fill
+                in Questionnaire</a>
+            </dd>
+            <dd id="viewResult">
+              <a href="javascript:;" onclick="jump('html/assessment/questionnaire/result.html')" style="cursor:pointer">View
+                Result</a>
+            </dd>
+          </dl>
         </li>
         <li class="layui-nav-item" id="crcScreening">
-          <a onclick="jump('/html/common/home.html')" style="cursor:pointer">CRC Screening</a>
+          <a href="javascript:;" onclick="jump('/html/common/home.html')" style="cursor:pointer">CRC Screening</a>
+        </li>
+        <li class="layui-nav-item" id="scheduleAnAppointment">
+          <a href="javascript:;" onclick="jump('/html/common/home.html')" style="cursor:pointer">Schedule an
+            Appointment</a>
         </li>
         <li class="layui-nav-item" id="otherResources">
-          <a onclick="jump('/html/common/home.html')" style="cursor:pointer">Other Recourses</a>
+          <a href="javascript:;" style="cursor:pointer">Data</a>
+          <dl class="layui-nav-child">
+            <dd id="riskFactors">
+              <a href="javascript:;" onclick="jump('html/assessment/risk/list.html')" style="cursor:pointer">Risk
+                Factors</a>
+            </dd>
+            <dd id="screeningMethods">
+              <a href="javascript:;" onclick="jump('html/screening/test/list.html')" style="cursor:pointer">Screening
+                Methods</a>
+            </dd>
+          </dl>
         </li>
       </ul>
     </div>
   </div>
+  <script>
+  layui.element.init();
+  </script>
 </body>
+
 </html>

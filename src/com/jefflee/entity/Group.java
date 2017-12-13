@@ -10,24 +10,24 @@ public class Group {
 		return groupId;
 	}
 
-	public String getTitle() {
-		return title;
-	}
-
 	public String getStatus() {
 		return status;
+	}
+
+	public String getTitle() {
+		return title;
 	}
 
 	public void setGroupId(String groupId) {
 		this.groupId = groupId;
 	}
 
-	public void setTitle(String title) {
-		this.title = title;
-	}
-
 	public void setStatus(String status) {
 		this.status = status;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
 	}
 
 }

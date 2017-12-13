@@ -1,20 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="TestMapper">
-
   <resultMap id="testMap" type="Test">
-    <id property="testId" column="test_id"/>
-    <result property="name" column="name"/>
-    <result property="category" column="category"/>
-    <result property="timeInterval" column="time_interval"/>
-    <result property="performance" column="performance"/>
-    <result property="complexity" column="complexity"/>
-    <result property="benefits" column="benefits"/>
-    <result property="limitations" column="limitations"/>
+    <id property="testId" column="test_id" />
+    <result property="name" column="name" />
+    <result property="category" column="category" />
+    <result property="timeInterval" column="time_interval" />
+    <result property="performance" column="performance" />
+    <result property="complexity" column="complexity" />
+    <result property="benefits" column="benefits" />
+    <result property="limitations" column="limitations" />
   </resultMap>
-
   <sql id="table">scrn_test</sql>
-
   <sql id="attr0">test_id</sql>
   <sql id="attr1">name</sql>
   <sql id="attr2">category</sql>
@@ -23,7 +20,6 @@
   <sql id="attr5">complexity</sql>
   <sql id="attr6">benefits</sql>
   <sql id="attr7">limitations</sql>
-
   <sql id="val0">#{testId}</sql>
   <sql id="val1">#{name}</sql>
   <sql id="val2">#{category}</sql>
@@ -32,119 +28,162 @@
   <sql id="val5">#{complexity}</sql>
   <sql id="val6">#{benefits}</sql>
   <sql id="val7">#{limitations}</sql>
-
-  <sql id="eqn0"><include refid="attr0"/>=<include refid="val0"/></sql>
-  <sql id="eqn1"><include refid="attr1"/>=<include refid="val1"/></sql>
-  <sql id="eqn2"><include refid="attr2"/>=<include refid="val2"/></sql>
-  <sql id="eqn3"><include refid="attr3"/>=<include refid="val3"/></sql>
-  <sql id="eqn4"><include refid="attr4"/>=<include refid="val4"/></sql>
-  <sql id="eqn5"><include refid="attr5"/>=<include refid="val5"/></sql>
-  <sql id="eqn6"><include refid="attr6"/>=<include refid="val6"/></sql>
-  <sql id="eqn7"><include refid="attr7"/>=<include refid="val7"/></sql>
-
+  <sql id="eqn0">
+    <include refid="attr0" />
+    =
+    <include refid="val0" />
+  </sql>
+  <sql id="eqn1">
+    <include refid="attr1" />
+    =
+    <include refid="val1" />
+  </sql>
+  <sql id="eqn2">
+    <include refid="attr2" />
+    =
+    <include refid="val2" />
+  </sql>
+  <sql id="eqn3">
+    <include refid="attr3" />
+    =
+    <include refid="val3" />
+  </sql>
+  <sql id="eqn4">
+    <include refid="attr4" />
+    =
+    <include refid="val4" />
+  </sql>
+  <sql id="eqn5">
+    <include refid="attr5" />
+    =
+    <include refid="val5" />
+  </sql>
+  <sql id="eqn6">
+    <include refid="attr6" />
+    =
+    <include refid="val6" />
+  </sql>
+  <sql id="eqn7">
+    <include refid="attr7" />
+    =
+    <include refid="val7" />
+  </sql>
   <sql id="attrPrimary">
-    <include refid="attr0"/>
+    <include refid="attr0" />
   </sql>
   <sql id="attrOthers">
-    <include refid="attr1"/>,
-    <include refid="attr2"/>,
-    <include refid="attr3"/>,
-    <include refid="attr4"/>,
-    <include refid="attr5"/>,
-    <include refid="attr6"/>,
-    <include refid="attr7"/>
+    <include refid="attr1" />
+    ,
+    <include refid="attr2" />
+    ,
+    <include refid="attr3" />
+    ,
+    <include refid="attr4" />
+    ,
+    <include refid="attr5" />
+    ,
+    <include refid="attr6" />
+    ,
+    <include refid="attr7" />
   </sql>
   <sql id="attrAll">
-    <include refid="attrPrimary"/>,
-	<include refid="attrOthers"/>
+    <include refid="attrPrimary" />
+    ,
+    <include refid="attrOthers" />
   </sql>
-
   <sql id="valPrimary">
-    <include refid="val0"/>
+    <include refid="val0" />
   </sql>
   <sql id="valOthers">
-    <include refid="val1"/>,
-    <include refid="val2"/>,
-    <include refid="val3"/>,
-    <include refid="val4"/>,
-    <include refid="val5"/>,
-    <include refid="val6"/>,
-    <include refid="val7"/>
+    <include refid="val1" />
+    ,
+    <include refid="val2" />
+    ,
+    <include refid="val3" />
+    ,
+    <include refid="val4" />
+    ,
+    <include refid="val5" />
+    ,
+    <include refid="val6" />
+    ,
+    <include refid="val7" />
   </sql>
   <sql id="valAll">
-    <include refid="valPrimary"/>,
-	<include refid="valOthers"/>
+    <include refid="valPrimary" />
+    ,
+    <include refid="valOthers" />
   </sql>
-
   <sql id="eqnPrimary">
-    <include refid="eqn0"/>
+    <include refid="eqn0" />
   </sql>
   <sql id="eqnOthers">
-    <include refid="eqn1"/>,
-    <include refid="eqn2"/>,
-    <include refid="eqn3"/>,
-    <include refid="eqn4"/>,
-    <include refid="eqn5"/>,
-    <include refid="eqn6"/>,
-    <include refid="eqn7"/>
+    <include refid="eqn1" />
+    ,
+    <include refid="eqn2" />
+    ,
+    <include refid="eqn3" />
+    ,
+    <include refid="eqn4" />
+    ,
+    <include refid="eqn5" />
+    ,
+    <include refid="eqn6" />
+    ,
+    <include refid="eqn7" />
   </sql>
   <sql id="eqnAll">
-    <include refid="eqnPrimary"/>,
-	<include refid="eqnOthers"/>
+    <include refid="eqnPrimary" />
+    ,
+    <include refid="eqnOthers" />
   </sql>
   <sql id="eqnWhere">
-    <include refid="eqnPrimary"/>
+    <include refid="eqnPrimary" />
   </sql>
-
   <insert id="insert" parameterType="Test">
     INSERT INTO
-    <include refid="table"/>
+    <include refid="table" />
     (
-    <include refid="attrAll"/>
+    <include refid="attrAll" />
     ) VALUES (
-    <include refid="valAll"/>
+    <include refid="valAll" />
     )
   </insert>
-
   <delete id="delete" parameterType="String">
     DELETE FROM
-    <include refid="table"/>
+    <include refid="table" />
     WHERE
-    <include refid="eqnWhere"/>
+    <include refid="eqnWhere" />
   </delete>
-
   <delete id="batchDelete" parameterType="List">
     DELETE FROM
-    <include refid="table"/>
+    <include refid="table" />
     WHERE
-    <include refid="attrPrimary"/>
+    <include refid="attrPrimary" />
     IN
-    <foreach item="item" index="index" collection="list" open="(" separator="," close=")">#{item}</foreach>
+    <foreach item="item" index="index" collection="list" open="("
+      separator="," close=")">#{item}</foreach>
   </delete>
-
   <update id="update" parameterType="Test">
     UPDATE
-    <include refid="table"/>
+    <include refid="table" />
     SET
-    <include refid="eqnOthers"/>
+    <include refid="eqnOthers" />
     WHERE
-    <include refid="eqnWhere"/>
+    <include refid="eqnWhere" />
   </update>
-
   <select id="selectOne" parameterType="String" resultType="Test">
     SELECT
-    <include refid="attrAll"/>
+    <include refid="attrAll" />
     FROM
-    <include refid="table"/>
+    <include refid="table" />
     WHERE
-    <include refid="eqnWhere"/>
+    <include refid="eqnWhere" />
   </select>
-
   <select id="selectList" parameterType="String" resultType="Test">
     SELECT
-    <include refid="attrAll"/>
+    <include refid="attrAll" />
     FROM
-    <include refid="table"/>
+    <include refid="table" />
   </select>
-
 </mapper>

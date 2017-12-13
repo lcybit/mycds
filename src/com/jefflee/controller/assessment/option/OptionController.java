@@ -26,9 +26,9 @@ public class OptionController {
 		return optionDto;
 	}
 
-	@RequestMapping(value = "/modify", method = RequestMethod.POST)
-	public OptionDto modify(@RequestBody OptionDto optionDto) throws Exception {
-		optionDto = optionService.modify(optionDto);
+	@RequestMapping(value = "/find/{optionId}", method = RequestMethod.GET)
+	public OptionDto find(@PathVariable("optionId") String optionId) throws Exception {
+		OptionDto optionDto = optionService.findById(optionId);
 		return optionDto;
 	}
 
@@ -38,9 +38,9 @@ public class OptionController {
 		return optionDtoList;
 	}
 
-	@RequestMapping(value = "/find/{optionId}", method = RequestMethod.GET)
-	public OptionDto find(@PathVariable("optionId") String optionId) throws Exception {
-		OptionDto optionDto = optionService.findById(optionId);
+	@RequestMapping(value = "/modify", method = RequestMethod.POST)
+	public OptionDto modify(@RequestBody OptionDto optionDto) throws Exception {
+		optionDto = optionService.modify(optionDto);
 		return optionDto;
 	}
 

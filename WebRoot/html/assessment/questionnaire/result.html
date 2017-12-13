@@ -1,17 +1,19 @@
 <!DOCTYPE html>
 <html>
+
 <head>
+<title>Result</title>
 <link rel="stylesheet" href="/plugin/layui/css/layui.css">
-<script src="/plugin/layui/layui.all.js"></script>
 <script src="/plugin/jquery/jquery.js"></script>
 <script src="/plugin/jquery/jquery.serializejson.js"></script>
 <script src="/plugin/jsrender/jsrender.js"></script>
 <script src="/plugin/echarts/echarts.js"></script>
 </head>
+
 <body>
   <div class="layui-container" style="width:100%; height:100%">
     <div class="layui-col-md8">
-      <button class="layui-btn" type="button" id="convert" onclick="goConvert()">Itemization</button>
+      <button class="layui-btn" type="button" id="convert" onclick="goConvert()" style="display:none">Itemization</button>
       <div id="riskChart" style="width:100%; height:500px"></div>
     </div>
     <div class="layui-col-md4">
@@ -19,26 +21,44 @@
     </div>
   </div>
   <script id="information" type="text/x-jsrender">
-    <p>Total Risk Value: {{:totalRisk}}</p>
-    <br />
-    <p>Risk Factors:</p>
-    {{props riskData}}
-      {{if prop > 0}}
-        <p>{{:key}}</p>
-      {{/if}}
-    {{/props}}
-    <br />
-    <p>Recommonded Tests:</p>
-    {{for recommondedTestList}}
-      <p>{{:name}}</p>
-    {{/for}}
+    <div class="layui-collapse">
+      <div class="layui-colla-item">
+        <h2 class="layui-colla-title">Risk Factors</h2>
+        <div class="layui-colla-content layui-show layui-form">
+        {{props riskData}}
+          {{if prop != 0}}
+            <p><input type="checkbox" title="{{:key}}" value="{{:key}}" lay-skin="primary" checked="checked" /></p>
+          {{/if}}
+        {{/props}}
+        </div>
+      </div>
+      <div class="layui-colla-item">
+        <h2 class="layui-colla-title">Recommonded Tests</h2>
+          <div class="layui-colla-content layui-show">
+          {{for recommondedTestList}}
+            <p><a style="cursor:pointer">{{:name}}</a></p>
+          {{/for}}
+          </div>
+      </div>
+    </div>
   </script>
   <script>
     var status = 'person';
     var riskChart = echarts.init(document.getElementById('riskChart'));
-    var resultId = localStorage.getItem('currentResultId');
+    var resultId = sessionStorage.getItem('currentResultId');
     $(document).ready(function() {
-      goChart(resultId);
+      if (null == resultId) {
+        alert('Please submit questionnaire at first!');
+        $('#fillInQuestionnaire a')[0].click();
+      } else {
+        goChart(resultId);
+        layui.element.init();
+        var form = layui.form;
+        form.on('checkbox', function(data) {
+          dataToggle(data.value);
+        });
+        form.render();
+      }
     });
   
     function goChart(resultId) {
@@ -48,66 +68,143 @@
         url : '/result/assess/' + resultId,
         contentType : 'application/json',
         success : function(result) {
+          sessionStorage.setItem('originalResultData', JSON.stringify(result));
+          sessionStorage.setItem('currentResultData', JSON.stringify(result));
           $('#informationText').html($.templates('#information').render(result));
-          if(status === 'person') {
-            displayByPerson(result.riskData, result.avgRiskData);
-          } else if(status === 'risk') {
-            displayByRisk(result.riskData, result.avgRiskData);
-          }
+          displayByPerson(result.riskData, result.avgRiskData, result.total, result.avgTotal);
+          /* if (status === 'person') {
+            displayByPerson(result.riskData, result.avgRiskData, result.total, result.avgTotal);
+          } else if (status === 'risk') {
+            displayByRisk(result.riskData, result.avgRiskData, result.total, result.avgTotal);
+          } */
         }
       });
     }
     
-    function displayByPerson(riskData, avgRiskData) {
+    function dataToggle(risk) {
+      var o = JSON.parse(sessionStorage.getItem('originalResultData'));
+      var c = JSON.parse(sessionStorage.getItem('currentResultData'));
+      var serie = [];
+      if(c.riskData[risk] === o.riskData[risk]) {
+        c.riskData[risk] = 0;
+        c.total -= o.riskData[risk];
+      } else {
+        c.riskData[risk] = o.riskData[risk];
+        c.total += o.riskData[risk];
+      }
+      serie.push(setSerie('Accumulate', risk,c.riskData[risk], o.avgRiskData[risk]));
+      //serie.push(setSerie('Total', 'Total', c.total.toFixed(2), o.avgTotal));
+      var totalSerie = {
+        name : 'Total',
+        type : 'bar',
+        barWith : 40,
+        stack : 'Accumulate',
+        label : {
+          normal : {
+            show : true,
+            textStyle : {
+              color : '#000'
+            },
+            position : 'insideBottom',
+            formatter : 'Risk : {c}'
+          }
+        },
+        itemStyle : {
+          normal : {
+            color : 'rgba(0,0,0,0)'
+          }
+        },
+        data : [c.total.toFixed(2), o.avgTotal]
+      };
+      serie.push(totalSerie);
+      riskChart.setOption(setChartOption(serie), false);
+      sessionStorage.setItem('currentResultData', JSON.stringify(c));
+    }
+  
+    function displayByPerson(riskData, avgRiskData, total, avgTotal) {
       var legendData = [];
       var series = [];
       for (var risk in riskData) {
-        legendData.push(risk);
-        var serie = {
-          name: risk,
-          type: 'bar',
-          barWidth: 20,
-          stack: 'TotalRisk',
-          label: {
-            normal: {
-              show: true,
-              position: 'insideRight'
-            }
-          },
-          data: [riskData[risk], avgRiskData[risk]]
-        };
-        series.push(serie);
+        //legendData.push(risk);
+        series.push(setSerie('Accumulate', risk, riskData[risk], avgRiskData[risk]));
       }
-      var option = {
-        tooltip: {
-          trigger: 'axis',
-          axisPointer: {
-            type: 'shadow'
+      //legendData.push('Total');
+      //series.push(setSerie('Total', 'Total', total, avgTotal));
+      var totalSerie = {
+        name : 'Total',
+        type : 'bar',
+        barWith : 40,
+        stack : 'Accumulate',
+        label : {
+          normal : {
+            show : true,
+            textStyle : {
+              color : '#000'
+            },
+            position : 'insideBottom',
+            formatter : 'Risk : {c}'
           }
         },
-        legend: {
-          data: legendData
+        itemStyle : {
+          normal : {
+            color : 'rgba(0,0,0,0)'
+          }
         },
-        grid: {
-          left: '3%',
-          right: '4%',
-          bottom: '3%',
-          containLabel: true
-        },
-        xAxis: {
-          type: 'value'
-        },
-        yAxis:  {
-          type: 'category',
-          data: ['You', 'Avg']
-        },
-        series: series
+        data : [total, avgTotal]
       };
-      riskChart.setOption(option, true);
+      series.push(totalSerie);
+      riskChart.setOption(setChartOption(series), true);
       window.onresize = riskChart.resize;
     }
 
-    function displayByRisk(riskData, avgRiskData) {
+    function setSerie(serieName, riskName, personData, averageData) {
+      var serie = {
+        name : riskName,
+        type : 'bar',
+        barWidth : 40,
+        stack : serieName,
+        label : {
+          normal : {
+            show : true,
+            position : 'insideRight',
+            formatter : '{a}'
+          }
+        },
+        data : [ personData == 0 ? '-' : personData, averageData ]
+      };
+      return serie;
+    }
+    
+    function setChartOption(series) {
+      var option = {
+        tooltip : {
+          trigger : 'axis',
+          axisPointer : {
+            type : 'shadow'
+          }
+        },
+        //legend : {
+        //  data : legendData
+        //},
+        grid : {
+          left : '3%',
+          right : '4%',
+          bottom : '3%',
+          containLabel : true
+        },
+        xAxis : {
+          type : 'category',
+          data : [ 'You', 'Avg' ]
+        },
+        yAxis : {
+          type : 'value'
+        },
+        series : series
+      };
+      return option;
+    }
+    
+    /* function displayByRisk(riskData, avgRiskData, total, avgTotal) {
       var yAxisData = [];
       var seriesData = [];
       var avgSeriesData = [];
@@ -117,65 +214,66 @@
         avgSeriesData.push(avgRiskData[risk]);
       }
       var option = {
-        tooltip: {
-          trigger: 'axis',
-          axisPointer: {
-            type: 'shadow'
+        tooltip : {
+          trigger : 'axis',
+          axisPointer : {
+            type : 'shadow'
           }
         },
-        legend: {
-          data: ['You', 'Avg']
+        legend : {
+          data : [ 'You', 'Avg' ]
         },
-        grid: {
-          left: '3%',
-          right: '4%',
-          bottom: '3%',
-          containLabel: true
+        grid : {
+          left : '3%',
+          right : '4%',
+          bottom : '3%',
+          containLabel : true
         },
-        xAxis: {
-          type: 'value'
+        xAxis : {
+          type : 'value'
         },
-        yAxis:  {
-          type: 'category',
-          data: yAxisData
+        yAxis : {
+          type : 'category',
+          data : yAxisData
         },
-        series: [{
-          name: 'You',
-          type: 'bar',
-          label: {
-            normal: {
-              show: true,
-              position: 'insideRight'
+        series : [ {
+          name : 'You',
+          type : 'bar',
+          label : {
+            normal : {
+              show : true,
+              position : 'insideRight',
+              formatter : '{c}'
             }
           },
-          data: seriesData
-        },
-        {
-          name: 'Avg',
-          type: 'bar',
-          label: {
-            normal: {
-              show: true,
-              position: 'insideRight'
+          data : seriesData
+        }, {
+          name : 'Avg',
+          type : 'bar',
+          label : {
+            normal : {
+              show : true,
+              position : 'insideRight'
             }
           },
-          data: avgSeriesData        
-        }]
+          data : avgSeriesData
+        } ]
       };
       riskChart.setOption(option, true);
       window.onresize = riskChart.resize;
     }
-		
+  
     function goConvert() {
-      if(status === 'person') {
+      if (status === 'person') {
         $('#convert').text('Accumulation');
         status = 'risk';
-      } else if(status === 'risk') {
+      } else if (status === 'risk') {
         $('#convert').text('Itemization');
         status = 'person';
       }
       goChart(resultId);
-    }
+    } */
   </script>
 </body>
+
 </html>

@@ -10,12 +10,12 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 public class BaseController {
 
-	public HttpServletRequest getRequest() {
-		return ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-	}
-
 	public Map<String, String[]> getParameterMap() {
 		return getRequest().getParameterMap();
+	}
+
+	public HttpServletRequest getRequest() {
+		return ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
 	}
 
 	public HttpSession getSession() {

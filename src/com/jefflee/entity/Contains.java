@@ -7,14 +7,6 @@ public class Contains {
 	private String childId;
 	private Integer childNo;
 
-	public String getContainsId() {
-		return containsId;
-	}
-
-	public String getParentId() {
-		return parentId;
-	}
-
 	public String getChildId() {
 		return childId;
 	}
@@ -23,12 +15,12 @@ public class Contains {
 		return childNo;
 	}
 
-	public void setContainsId(String containsId) {
-		this.containsId = containsId;
+	public String getContainsId() {
+		return containsId;
 	}
 
-	public void setParentId(String parentId) {
-		this.parentId = parentId;
+	public String getParentId() {
+		return parentId;
 	}
 
 	public void setChildId(String childId) {
@@ -37,6 +29,14 @@ public class Contains {
 
 	public void setChildNo(Integer childNo) {
 		this.childNo = childNo;
+	}
+
+	public void setContainsId(String containsId) {
+		this.containsId = containsId;
+	}
+
+	public void setParentId(String parentId) {
+		this.parentId = parentId;
 	}
 
 }

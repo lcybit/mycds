@@ -11,10 +11,10 @@ public interface TestService extends BaseService<TestDto, String> {
 
 	TestDto findById(String testId) throws Exception;
 
-	TestDto modify(TestDto testDto) throws Exception;
-
 	List<TestDto> findList() throws Exception;
 
 	List<TestDto> findRecommondedList(String resultId) throws Exception;
+
+	TestDto modify(TestDto testDto) throws Exception;
 
 }

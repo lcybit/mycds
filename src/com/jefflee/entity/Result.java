@@ -16,24 +16,16 @@ public class Result {
 	private int q9;
 	private int q10;
 
-	public String getResultId() {
-		return resultId;
-	}
-
-	public String getQuestionnaireId() {
-		return questionnaireId;
-	}
-
-	public String getSessionId() {
-		return sessionId;
-	}
-
 	public int getQ0() {
 		return q0;
 	}
 
 	public int getQ1() {
 		return q1;
+	}
+
+	public int getQ10() {
+		return q10;
 	}
 
 	public int getQ2() {
@@ -68,20 +60,16 @@ public class Result {
 		return q9;
 	}
 
-	public int getQ10() {
-		return q10;
+	public String getQuestionnaireId() {
+		return questionnaireId;
 	}
 
-	public void setResultId(String resultId) {
-		this.resultId = resultId;
+	public String getResultId() {
+		return resultId;
 	}
 
-	public void setQuestionnaireId(String questionnaireId) {
-		this.questionnaireId = questionnaireId;
-	}
-
-	public void setSessionId(String sessionId) {
-		this.sessionId = sessionId;
+	public String getSessionId() {
+		return sessionId;
 	}
 
 	public void setQ0(int q0) {
@@ -90,6 +78,10 @@ public class Result {
 
 	public void setQ1(int q1) {
 		this.q1 = q1;
+	}
+
+	public void setQ10(int q10) {
+		this.q10 = q10;
 	}
 
 	public void setQ2(int q2) {
@@ -124,8 +116,16 @@ public class Result {
 		this.q9 = q9;
 	}
 
-	public void setQ10(int q10) {
-		this.q10 = q10;
+	public void setQuestionnaireId(String questionnaireId) {
+		this.questionnaireId = questionnaireId;
+	}
+
+	public void setResultId(String resultId) {
+		this.resultId = resultId;
+	}
+
+	public void setSessionId(String sessionId) {
+		this.sessionId = sessionId;
 	}
 
 }

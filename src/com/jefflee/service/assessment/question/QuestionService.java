@@ -9,9 +9,9 @@ public interface QuestionService extends BaseService<QuestionDto, String> {
 
 	QuestionDto create(QuestionDto questionDto) throws Exception;
 
-	QuestionDto findDetailById(String questionId) throws Exception;
-
 	QuestionDto findById(String questionId) throws Exception;
+
+	QuestionDto findDetailById(String questionId) throws Exception;
 
 	List<QuestionDto> findListByParentId(String parentId) throws Exception;
 

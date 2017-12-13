@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<title>Edit</title>
+<link rel="stylesheet" href="/plugin/layui/css/layui.css" />
+<script src="/plugin/jquery/jquery.js"></script>
+<script src="/plugin/jquery/jquery.serializejson.js"></script>
+<script src="/plugin/jsrender/jsrender.js"></script>
+</head>
+
+<body>
+  <div class="layui-container" style="margin-top:30px;">
+    <form class="layui-form" id="test" method="post">
+      <div class="layui-form-item" hidden="hidden">
+        <label class="layui-form-label">Test ID:</label>
+        <div class="layui-input-block">
+          <input class="layui-input" name="testId" id="testId" type="text" />
+        </div>
+      </div>
+      <div class="layui-form-item">
+        <label class="layui-form-label">Name:</label>
+        <div class="layui-input-block">
+          <input class="layui-input" name="name" id="name" type="text" />
+        </div>
+      </div>
+      <div class="layui-form-item">
+        <label class="layui-form-label">Category:</label>
+        <div class="layui-input-block">
+          <input class="layui-input" name="category" id="category" type="text" />
+        </div>
+      </div>
+      <div class="layui-form-item">
+        <label class="layui-form-label">Time Interval:</label>
+        <div class="layui-input-block">
+          <input class="layui-input" name="timeInterval" id="timeInterval" type="text" />
+        </div>
+      </div>
+      <div class="layui-form-item">
+        <label class="layui-form-label">Performance:</label>
+        <div class="layui-input-block">
+          <input class="layui-input" name="performance" id="performance" type="text" />
+        </div>
+      </div>
+      <div class="layui-form-item">
+        <label class="layui-form-label">Complexity:</label>
+        <div class="layui-input-block">
+          <input class="layui-input" name="complexity" id="complexity" type="text" />
+        </div>
+      </div>
+      <div class="layui-form-item" hidden="hidden">
+        <label class="layui-form-label">Benefits:</label>
+        <div class="layui-input-block">
+          <input class="layui-input" name="benefits" id="benefits" type="text" />
+        </div>
+      </div>
+      <div class="layui-form-item" hidden="hidden">
+        <label class="layui-form-label">Limitations:</label>
+        <div class="layui-input-block">
+          <input class="layui-input" name="limitations" id="limitations" type="text" />
+        </div>
+      </div>
+      <div class="layui-form-item">
+        <div class="layui-input-block">
+          <button class="layui-btn" type="button" id="saveButton">Save</button>
+          <button class="layui-btn" type="button" onclick="goCancel()">Cancel</button>
+        </div>
+      </div>
+    </form>
+  </div>
+  <script>
+    $(document).ready(function() {
+      var action = sessionStorage.getItem('currentAction');
+      if (action === 'create') {
+      } else if (action === 'modify') {
+        var testId = sessionStorage.getItem('currentTestId');
+        $('#testId').attr('value', testId);
+        $.ajax({
+          async : false,
+          type : 'GET',
+          url : '/test/find/' + testId,
+          success : function(test) {
+            $('#name').attr('value', test.name);
+            $('#category').attr('value', test.category);
+            $('#timeInterval').attr('value', test.timeInterval);
+            $('#performance').attr('value', test.performance);
+            $('#complexity').attr('value', test.complexity);
+            $('#benefits').attr('value', test.benefits);
+            $('#limitations').attr('value', test.limitations);
+          }
+        });
+      }
+      $('#saveButton').attr('onclick', 'goSave("' + action + '")');
+    });
+  
+    function goSave(action) {
+      $.ajax({
+        async : false,
+        url : '/test/' + action,
+        type : 'POST',
+        dataType : 'json',
+        contentType : 'application/json',
+        data : JSON.stringify($('#test').serializeJSON()),
+        success : function(result) {
+          var index = parent.layer.getFrameIndex(window.name);
+          parent.layer.close(index);
+          parent.goList();
+        }
+      });
+    }
+  
+    function goCancel() {
+      var index = parent.layer.getFrameIndex(window.name);
+      parent.layer.close(index);
+    }
+  </script>
+</body>
+
+</html>

@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-<title>Questionnaire</title>
+<title>Detail</title>
 <link rel="stylesheet" href="/plugin/layui/css/layui.css" />
 <script src="/plugin/jquery/jquery.js"></script>
 <script src="/plugin/jquery/jquery.serializejson.js"></script>
 <script src="/plugin/jsrender/jsrender.js"></script>
-<script src="/plugin/layui/layui.all.js"></script>
 </head>
+
 <body>
   <div class="layui-container" style="margin-top: 30px; width:100%;">
     <form id="questionnaireDetail" class="layui-form" method="post">
@@ -15,6 +16,18 @@
         <div class="layui-form-row">Questionnaire ID:</div>
         <div class="layui-input-block">
           <input class="layui-input" name="questionnaireId" id="questionnaireId" type="text" />
+        </div>
+      </div>
+      <div class="layui-form-item" hidden="hidden">
+        <div class="layui-form-row">Result ID:</div>
+        <div class="layui-input-block">
+          <input class="layui-input" name="resultId" id="resultId" type="text" />
+        </div>
+      </div>
+      <div class="layui-form-item" hidden="hidden">
+        <div class="layui-form-row">Session ID:</div>
+        <div class="layui-input-block">
+          <input class="layui-input" name="sessionId" id="sessionId" type="text" />
         </div>
       </div>
     </form>
@@ -27,8 +40,8 @@
     </div>
 	{{for questionList tmpl="#questions" /}}
     <div class="layui-input-inline">
-      <button class="layui-btn" type="button" onclick="goBack()">Back</button>
-      <button class="layui-btn" type="button" onclick="goReset()">Reset</button>
+      <button class="layui-btn" type="button" onclick="goBack()" style="display:none">Back</button>
+      <button class="layui-btn" type="button" onclick="goReset()" style="display:none">Reset</button>
       <button class="layui-btn" type="button" onclick="goSubmit()">Submit</button>
     </div>
   </script>
@@ -43,51 +56,84 @@
   <script id="options" type="text/x-jsrender">
     <input class="layui-input"
            type="{{:type}}"
-           name="{{:'q' + #parent.getIndex()}}"
+           name="{{:'q' + #parent.parent.index}}"
            value="{{:value}}"
-           title="{{:title}}" 
-           {{if value==='0'}}checked="checked"{{/if}} />
+           title="{{:title}}"
+           {{if value == '0'}}checked="checked"{{/if}} />
   </script>
   <script>
     $(document).ready(function() {
-      var questionnaireId = localStorage.getItem('currentQuestionnaireId');
-      $('#questionnaireId').attr('value', questionnaireId);
-      goDetail(questionnaireId);
-      layui.use('form', function() {
-        layui.form.render();
-      });
+      $.ajax({
+        async : false,
+        type : 'GET',
+        url : '/questionnaire/list',
+        success : function(questionnaireList) {
+          var questionnaireId = questionnaireList[0].questionnaireId;
+          sessionStorage.setItem('currentQuestionnaireId', questionnaireId)
+          $('#questionnaireId').attr('value', questionnaireId);
+          goDetail(questionnaireId);
+        }
+      })
+      layui.form.render();
     });
   
     function goBack() {
       jump('/html/assessment/questionnaire/list.html');
     }
   
-    function goDetail(id) {
+    function goDetail(questionnaireId) {
       $.ajax({
         async : false,
         type : 'GET',
-        url : '/questionnaire/detail/' + id,
+        url : '/questionnaire/detail/' + questionnaireId,
         success : function(questionnaireDetail) {
           $('#questionnaireDetail').append($.templates('#questionnaire').render(questionnaireDetail));
+          var resultId = sessionStorage.getItem('currentResultId');
+          if(resultId) {
+            $.ajax({
+              async : false,
+              type : 'GET',
+              url : '/result/find/' + resultId,
+              success : function(result) {
+                $('#resultId').attr('value', resultId);
+                $('#sessionId').attr('value', result.sessionId);
+                $('#questionnaireDetail :text').each(function() {
+                  this.value = result[this.name];
+                });
+                $('#questionnaireDetail :radio').each(function() {
+                  if(result[this.name] == this.value) {
+                    this.checked = 'checked';
+                  }
+                });
+              }
+            })
+          }
         }
       });
     }
   
     function goSubmit() {
+      var resultId = sessionStorage.getItem('currentResultId');
+      var action = '';
+      if(resultId) {
+        action = 'modify';
+      } else {
+        action = 'create';
+      }
       $.ajax({
         async : false,
         type : 'POST',
-        url : '/result/create',
+        url : '/result/' + action,
         dataType : 'json',
         contentType : 'application/json',
         data : JSON.stringify($('#questionnaireDetail').serializeJSON()),
         success : function(result) {
-          localStorage.setItem('currentResultId', result.resultId);
-          jump('/html/assessment/questionnaire/result.html')
+          sessionStorage.setItem('currentResultId', result.resultId);
+          $('#viewResult a')[0].click();
         }
       });
     }
-    
   </script>
 </body>
+
 </html>

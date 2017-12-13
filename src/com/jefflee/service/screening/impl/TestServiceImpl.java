@@ -56,6 +56,7 @@ public class TestServiceImpl extends BaseServiceImpl<TestDto, Test, String> impl
 
 	@Override
 	public List<TestDto> findRecommondedList(String resultId) throws Exception {
+		// TODO implement the selection algorithm here
 		List<TestDto> testDtoList = findList();
 		Random random = new Random();
 		int size = testDtoList.size();

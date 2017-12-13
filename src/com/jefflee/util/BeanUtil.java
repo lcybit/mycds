@@ -15,6 +15,10 @@ public class BeanUtil {
 		return;
 	}
 
+	public static void copyPropertiesIgnoreNull(Object source, Object target) {
+		BeanUtils.copyProperties(source, target, getNullPropertyNames(source));
+	}
+
 	public static String[] getNullPropertyNames(Object source) {
 		final BeanWrapper sourceBean = new BeanWrapperImpl(source);
 		PropertyDescriptor[] propertyDescriptors = sourceBean.getPropertyDescriptors();
@@ -27,10 +31,6 @@ public class BeanUtil {
 		}
 		String[] nullPropertyNames = new String[nullPropertyNameSet.size()];
 		return nullPropertyNameSet.toArray(nullPropertyNames);
-	}
-
-	public static void copyPropertiesIgnoreNull(Object source, Object target) {
-		BeanUtils.copyProperties(source, target, getNullPropertyNames(source));
 	}
 
 }

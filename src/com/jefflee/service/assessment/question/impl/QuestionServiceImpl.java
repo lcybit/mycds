@@ -56,17 +56,6 @@ public class QuestionServiceImpl extends BaseServiceImpl<QuestionDto, Question, 
 	}
 
 	@Override
-	public QuestionDto modify(QuestionDto questionDto) throws Exception {
-		Question question = baseDao.selectOne(mapperName + ".selectOne", questionDto.getQuestionId());
-		BeanUtil.copyPropertiesIgnoreNull(questionDto, question);
-		if (1 == baseDao.update(mapperName + ".update", question)) {
-			BeanUtil.copyPropertiesIgnoreNull(question, questionDto);
-			return questionDto;
-		}
-		return null;
-	}
-
-	@Override
 	public QuestionDto findById(String questionId) throws Exception {
 		Question question = baseDao.selectOne(mapperName + ".selectOne", questionId);
 		QuestionDto questionDto = new QuestionDto();
@@ -94,6 +83,16 @@ public class QuestionServiceImpl extends BaseServiceImpl<QuestionDto, Question, 
 			questionDtoList.add(findById(parentContainsDto.getChildId()));
 		}
 		return questionDtoList;
+	}
+
+	@Override
+	public QuestionDto modify(QuestionDto questionDto) throws Exception {
+		Question question = baseDao.selectOne(mapperName + ".selectOne", questionDto.getQuestionId());
+		BeanUtil.copyPropertiesIgnoreNull(questionDto, question);
+		if (1 == baseDao.update(mapperName + ".update", question)) {
+			return questionDto;
+		}
+		return null;
 	}
 
 }

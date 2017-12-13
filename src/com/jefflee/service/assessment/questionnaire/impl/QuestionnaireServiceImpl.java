@@ -47,13 +47,11 @@ public class QuestionnaireServiceImpl extends BaseServiceImpl<QuestionnaireDto, 
 	}
 
 	@Override
-	public QuestionnaireDto modify(QuestionnaireDto questionnaireDto) throws Exception {
-		Questionnaire questionnaire = new Questionnaire();
-		BeanUtil.copyProperties(questionnaireDto, questionnaire);
-		if (1 == baseDao.update(mapperName + ".update", questionnaire)) {
-			return questionnaireDto;
-		}
-		return null;
+	public QuestionnaireDto findById(String questionnaireId) throws Exception {
+		Questionnaire questionnaire = baseDao.selectOne(mapperName + ".selectOne", questionnaireId);
+		QuestionnaireDto questionnaireDto = new QuestionnaireDto();
+		BeanUtil.copyProperties(questionnaire, questionnaireDto);
+		return questionnaireDto;
 	}
 
 	@Override
@@ -81,11 +79,13 @@ public class QuestionnaireServiceImpl extends BaseServiceImpl<QuestionnaireDto, 
 	}
 
 	@Override
-	public QuestionnaireDto findById(String questionnaireId) throws Exception {
-		Questionnaire questionnaire = baseDao.selectOne(mapperName + ".selectOne", questionnaireId);
-		QuestionnaireDto questionnaireDto = new QuestionnaireDto();
-		BeanUtil.copyProperties(questionnaire, questionnaireDto);
-		return questionnaireDto;
+	public QuestionnaireDto modify(QuestionnaireDto questionnaireDto) throws Exception {
+		Questionnaire questionnaire = new Questionnaire();
+		BeanUtil.copyPropertiesIgnoreNull(questionnaireDto, questionnaire);
+		if (1 == baseDao.update(mapperName + ".update", questionnaire)) {
+			return questionnaireDto;
+		}
+		return null;
 	}
 
 }

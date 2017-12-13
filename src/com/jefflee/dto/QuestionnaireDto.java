@@ -14,52 +14,52 @@ public class QuestionnaireDto {
 	// others
 	private List<QuestionDto> questionList;
 
+	public List<QuestionDto> getQuestionList() {
+		return questionList;
+	}
+
 	public String getQuestionnaireId() {
 		return questionnaireId;
-	}
-
-	public void setQuestionnaireId(String questionnaireId) {
-		this.questionnaireId = questionnaireId;
-	}
-
-	public String getTheme() {
-		return theme;
-	}
-
-	public void setTheme(String theme) {
-		this.theme = theme;
-	}
-
-	public String getTitle() {
-		return title;
-	}
-
-	public void setTitle(String title) {
-		this.title = title;
-	}
-
-	public String getStyle() {
-		return style;
-	}
-
-	public void setStyle(String style) {
-		this.style = style;
 	}
 
 	public String getStatus() {
 		return status;
 	}
 
-	public void setStatus(String status) {
-		this.status = status;
+	public String getStyle() {
+		return style;
 	}
 
-	public List<QuestionDto> getQuestionList() {
-		return questionList;
+	public String getTheme() {
+		return theme;
+	}
+
+	public String getTitle() {
+		return title;
 	}
 
 	public void setQuestionList(List<QuestionDto> questionList) {
 		this.questionList = questionList;
+	}
+
+	public void setQuestionnaireId(String questionnaireId) {
+		this.questionnaireId = questionnaireId;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public void setStyle(String style) {
+		this.style = style;
+	}
+
+	public void setTheme(String theme) {
+		this.theme = theme;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
 	}
 
 }

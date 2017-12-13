@@ -8,6 +8,10 @@ public class ComponentDto {
 	private ComponentDto parent;
 	private List<ComponentDto> childList;
 
+	public List<ComponentDto> getChildList() {
+		return childList;
+	}
+
 	public String getComponentId() {
 		return componentId;
 	}
@@ -16,8 +20,8 @@ public class ComponentDto {
 		return parent;
 	}
 
-	public List<ComponentDto> getChildList() {
-		return childList;
+	public void setChildList(List<ComponentDto> childList) {
+		this.childList = childList;
 	}
 
 	public void setComponentId(String componentId) {
@@ -26,10 +30,6 @@ public class ComponentDto {
 
 	public void setParent(ComponentDto parent) {
 		this.parent = parent;
-	}
-
-	public void setChildList(List<ComponentDto> childList) {
-		this.childList = childList;
 	}
 
 }

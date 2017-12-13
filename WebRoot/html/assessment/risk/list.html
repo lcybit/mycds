@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>List</title>
+<link rel="stylesheet" href="/plugin/layui/css/layui.css">
+<script src="/plugin/jquery/jquery.js"></script>
+<script src="/plugin/jquery/jquery.serializejson.js"></script>
+<script src="/plugin/jsrender/jsrender.js"></script>
+</head>
+
+<body>
+  <div class="layui-container" style="width:100%;">
+    <table class="layui-table">
+      <thead>
+        <tr>
+          <th hidden="hidden">Risk ID</th>
+          <th>Name</th>
+          <th>Category</th>
+          <th>Alterable</th>
+          <th>Effect</th>
+          <th>Operation</th>
+        </tr>
+      </thead>
+      <tbody id="riskList">
+      </tbody>
+    </table>
+    <div class="layui-input-inline">
+      <button class="layui-btn" onclick="goBack()" style="display:none">Back</button>
+      <button class="layui-btn" onclick="goAdd()">Add</button>
+    </div>
+  </div>
+  <script id="risk" type="text/x-jsrender">
+    <tr>
+      <td hidden="hidden">{{:riskId}}</td>
+      <td>{{:name}}</td>
+      <td>{{:category}}</td>
+      <td>{{:alterable}}</td>
+      <td>{{:effect}}</td>
+      <td>
+        <button class="layui-btn" onclick="goDetail('{{:riskId}}')" style="display:none">Detail</button>
+        <button class="layui-btn" onclick="goModify('{{:riskId}}')">Modify</button>
+      </td>
+    </tr>
+  </script>
+  <script>
+    $(document).ready(function() {
+      goList();
+    });
+  
+    function goAdd() {
+      sessionStorage.setItem('currentAction', 'create');
+      layui.use('layer', function() {
+        var layer = layui.layer;
+        layer.open({
+          type : 2,
+          id : 'create',
+          title : 'Risk',
+          content : '/html/assessment/risk/edit.html',
+          area : [ '700px', '500px' ],
+          shade : 0.5,
+          closeBtn : false
+        });
+      });
+    }
+  
+    function goModify(riskId) {
+      sessionStorage.setItem('currentAction', 'modify');
+      sessionStorage.setItem('currentRiskId', riskId);
+      layui.use('layer', function() {
+        var layer = layui.layer;
+        layer.open({
+          type : 2,
+          id : 'modify',
+          title : 'Risk',
+          content : '/html/assessment/risk/edit.html',
+          area : [ '700px', '500px' ],
+          shade : 0.5,
+          closeBtn : false,
+        });
+      });
+    }
+  
+    function goList() {
+      $.ajax({
+        async : false,
+        type : 'GET',
+        url : '/risk/list',
+        success : function(riskList) {
+          $('#riskList').html($.templates('#risk').render(riskList));
+        }
+      });
+    }
+  
+    function goDetail(id) {
+      sessionStorage.setItem('currentRiskId', id);
+      jump('/html//risk/detail.html');
+    }
+  
+    function goBack() {
+      jump('/html/common/home.html');
+    }
+  </script>
+
+</body>
+</html>

@@ -26,15 +26,15 @@ public class QuestionnaireController {
 		return questionnaireDto;
 	}
 
-	@RequestMapping(value = "/modify", method = RequestMethod.POST)
-	public QuestionnaireDto modify(@RequestBody QuestionnaireDto questionnaireDto) throws Exception {
-		questionnaireDto = questionnaireService.modify(questionnaireDto);
-		return questionnaireDto;
-	}
-
 	@RequestMapping(value = "/detail/{questionnaireId}", method = RequestMethod.GET)
 	public QuestionnaireDto detail(@PathVariable("questionnaireId") String questionnaireId) throws Exception {
 		QuestionnaireDto questionnaireDto = questionnaireService.findDetailById(questionnaireId);
+		return questionnaireDto;
+	}
+
+	@RequestMapping(value = "/find/{questionnaireId}", method = RequestMethod.GET)
+	public QuestionnaireDto find(@PathVariable("questionnaireId") String questionnaireId) throws Exception {
+		QuestionnaireDto questionnaireDto = questionnaireService.findById(questionnaireId);
 		return questionnaireDto;
 	}
 
@@ -44,9 +44,9 @@ public class QuestionnaireController {
 		return questionnaireDtoList;
 	}
 
-	@RequestMapping(value = "/find/{questionnaireId}", method = RequestMethod.GET)
-	public QuestionnaireDto find(@PathVariable("questionnaireId") String questionnaireId) throws Exception {
-		QuestionnaireDto questionnaireDto = questionnaireService.findById(questionnaireId);
+	@RequestMapping(value = "/modify", method = RequestMethod.POST)
+	public QuestionnaireDto modify(@RequestBody QuestionnaireDto questionnaireDto) throws Exception {
+		questionnaireDto = questionnaireService.modify(questionnaireDto);
 		return questionnaireDto;
 	}
 

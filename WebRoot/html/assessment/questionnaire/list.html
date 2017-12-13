@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-<title>Questionnaire List</title>
+<title>List</title>
 <link rel="stylesheet" href="/plugin/layui/css/layui.css" />
 <script src="/plugin/jquery/jquery.js"></script>
 <script src="/plugin/jquery/jquery.serializejson.js"></script>
 <script src="/plugin/jsrender/jsrender.js"></script>
-<script src="/plugin/layui/layui.all.js"></script>
 </head>
+
 <body>
   <div class="layui-container" style="width:100%;">
     <table class="layui-table">
@@ -21,15 +22,15 @@
           <th>Operation</th>
         </tr>
       </thead>
-      <tbody  id="questionnaireList">
+      <tbody id="questionnaireList">
       </tbody>
     </table>
     <div class="layui-input-inline">
-      <button class="layui-btn" onclick="goBack()">Back</button>
+      <button class="layui-btn" onclick="goBack()" style="display:none">Back</button>
       <button class="layui-btn" onclick="goAdd()" style="display:none">Add</button>
     </div>
   </div>
-  <script id="questionnaires" type="text/x-jsrender">
+  <script id="questionnaire" type="text/x-jsrender">
     <tr>
       <td hidden="hidden">{{:questionnaireId}}</td>
       <td>{{:theme}}</td>
@@ -49,7 +50,7 @@
     });
   
     function goAdd() {
-      localStorage.setItem('currentAction', 'create');
+      sessionStorage.setItem('currentAction', 'create');
       layui.use('layer', function() {
         var layer = layui.layer;
         layer.open({
@@ -63,10 +64,10 @@
         });
       });
     }
-    
+  
     function goModify(questionnaireId) {
-      localStorage.setItem('currentAction', 'modify');
-      localStorage.setItem('currentQuestionnaireId', questionnaireId);
+      sessionStorage.setItem('currentAction', 'modify');
+      sessionStorage.setItem('currentQuestionnaireId', questionnaireId);
       layui.use('layer', function() {
         var layer = layui.layer;
         layer.open({
@@ -80,32 +81,32 @@
         });
       });
     }
-    
+  
     function goList() {
       $.ajax({
         async : false,
         type : 'GET',
         url : '/questionnaire/list',
         success : function(questionnaireList) {
-          $('#questionnaireList').html($.templates('#questionnaires').render(questionnaireList));
+          $('#questionnaireList').html($.templates('#questionnaire').render(questionnaireList));
         }
       });
     }
   
     function goDetail(id) {
-      localStorage.setItem('currentQuestionnaireId', id);
+      sessionStorage.setItem('currentQuestionnaireId', id);
       jump('/html/assessment/questionnaire/detail.html');
     }
-    
+  
     function goQuestions(id) {
-      localStorage.setItem('currentQuestionnaireId', id);
+      sessionStorage.setItem('currentQuestionnaireId', id);
       jump('/html/assessment/question/list.html');
     }
   
     function goBack() {
       jump('/html/common/home.html');
     }
-  
   </script>
 </body>
+
 </html>

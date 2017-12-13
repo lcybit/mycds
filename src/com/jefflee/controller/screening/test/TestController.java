@@ -26,9 +26,9 @@ public class TestController {
 		return testDto;
 	}
 
-	@RequestMapping(value = "/modify", method = RequestMethod.POST)
-	public TestDto modify(@RequestBody TestDto testDto) throws Exception {
-		testDto = testService.modify(testDto);
+	@RequestMapping(value = "/find/{testId}", method = RequestMethod.GET)
+	public TestDto find(@PathVariable("testId") String testId) throws Exception {
+		TestDto testDto = testService.findById(testId);
 		return testDto;
 	}
 
@@ -38,9 +38,9 @@ public class TestController {
 		return testDtoList;
 	}
 
-	@RequestMapping(value = "/find/{testId}", method = RequestMethod.GET)
-	public TestDto find(@PathVariable("testId") String testId) throws Exception {
-		TestDto testDto = testService.findById(testId);
+	@RequestMapping(value = "/modify", method = RequestMethod.POST)
+	public TestDto modify(@RequestBody TestDto testDto) throws Exception {
+		testDto = testService.modify(testDto);
 		return testDto;
 	}
 

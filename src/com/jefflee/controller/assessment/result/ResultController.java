@@ -21,9 +21,21 @@ public class ResultController {
 	@Resource(name = "resultService")
 	private ResultService resultService;
 
+	@RequestMapping(value = "/assess/{resultId}", method = RequestMethod.GET)
+	public Map<String, Object> assess(@PathVariable("resultId") String resultId) throws Exception {
+		Map<String, Object> result = resultService.assess(resultId);
+		return result;
+	}
+
 	@RequestMapping(value = "/create", method = RequestMethod.POST)
 	public ResultDto create(@RequestBody ResultDto resultDto) throws Exception {
 		resultDto = resultService.create(resultDto);
+		return resultDto;
+	}
+
+	@RequestMapping(value = "/find/{resultId}", method = RequestMethod.GET)
+	public ResultDto find(@PathVariable("resultId") String resultId) throws Exception {
+		ResultDto resultDto = resultService.findById(resultId);
 		return resultDto;
 	}
 
@@ -39,16 +51,10 @@ public class ResultController {
 		return resultDtoList;
 	}
 
-	@RequestMapping(value = "/find/{resultId}", method = RequestMethod.GET)
-	public ResultDto find(@PathVariable("resultId") String resultId) throws Exception {
-		ResultDto resultDto = resultService.findById(resultId);
+	@RequestMapping(value = "/modify", method = RequestMethod.POST)
+	public ResultDto modify(@RequestBody ResultDto resultDto) throws Exception {
+		resultDto = resultService.modify(resultDto);
 		return resultDto;
-	}
-
-	@RequestMapping(value = "/assess/{resultId}", method = RequestMethod.GET)
-	public Map<String, Object> assess(@PathVariable("resultId") String resultId) throws Exception {
-		Map<String, Object> result = resultService.assess(resultId);
-		return result;
 	}
 
 }

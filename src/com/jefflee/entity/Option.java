@@ -12,40 +12,40 @@ public class Option {
 		return optionId;
 	}
 
-	public String getType() {
-		return type;
+	public String getStatus() {
+		return status;
 	}
 
 	public String getTitle() {
 		return title;
 	}
 
-	public String getValue() {
-		return value;
+	public String getType() {
+		return type;
 	}
 
-	public String getStatus() {
-		return status;
+	public String getValue() {
+		return value;
 	}
 
 	public void setOptionId(String optionId) {
 		this.optionId = optionId;
 	}
 
-	public void setType(String type) {
-		this.type = type;
+	public void setStatus(String status) {
+		this.status = status;
 	}
 
 	public void setTitle(String title) {
 		this.title = title;
 	}
 
-	public void setValue(String value) {
-		this.value = value;
+	public void setType(String type) {
+		this.type = type;
 	}
 
-	public void setStatus(String status) {
-		this.status = status;
+	public void setValue(String value) {
+		this.value = value;
 	}
 
 }

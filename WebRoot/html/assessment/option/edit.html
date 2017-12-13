@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-<title>Create Question</title>
+<title>Edit</title>
 <link rel="stylesheet" href="/plugin/layui/css/layui.css" />
 <script src="/plugin/jquery/jquery.js"></script>
 <script src="/plugin/jquery/jquery.serializejson.js"></script>
 <script src="/plugin/jsrender/jsrender.js"></script>
-<script src="/plugin/layui/layui.all.js"></script>
 </head>
+
 <body>
   <div class="layui-container" style="margin-top:30px;">
     <form class="layui-form" id="option" method="post">
@@ -53,19 +54,19 @@
   </div>
   <script>
     $(document).ready(function() {
-      var action = localStorage.getItem('currentAction');
+      var action = sessionStorage.getItem('currentAction');
       if (action === 'create') {
-        var questionId = localStorage.getItem('currentQuestionId');
+        var questionId = sessionStorage.getItem('currentQuestionId');
         $('#questionId').attr('value', questionId);
       } else if (action === 'modify') {
-        var optionId = localStorage.getItem('currentOptionId');
+        var optionId = sessionStorage.getItem('currentOptionId');
         $('#optionId').attr('value', optionId);
         $.ajax({
           async : false,
           type : 'GET',
           url : '/option/find/' + optionId,
           success : function(option) {
-            $('[name="type"][value="'+ option.type + '"]').attr('checked', 'checked');
+            $('[name="type"][value="' + option.type + '"]').attr('checked', 'checked');
             $('#title').attr('value', option.title);
             $('#value').attr('value', option.value);
           }
@@ -92,10 +93,12 @@
         }
       });
     }
+  
     function goCancel() {
       var index = parent.layer.getFrameIndex(window.name);
       parent.layer.close(index);
     }
   </script>
 </body>
+
 </html>

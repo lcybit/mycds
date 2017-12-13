@@ -1,115 +1,119 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="QuestionMapper">
-
   <resultMap id="questionMap" type="Question">
-    <id property="questionId" column="question_id"/>
-    <result property="title" column="title"/>
-    <result property="status" column="status"/>
+    <id property="questionId" column="question_id" />
+    <result property="title" column="title" />
+    <result property="status" column="status" />
   </resultMap>
-
   <sql id="table">asmt_question</sql>
-
   <sql id="attr0">question_id</sql>
   <sql id="attr1">title</sql>
   <sql id="attr2">status</sql>
-
   <sql id="val0">#{questionId}</sql>
   <sql id="val1">#{title}</sql>
   <sql id="val2">#{status}</sql>
-
-  <sql id="eqn0"><include refid="attr0"/>=<include refid="val0"/></sql>
-  <sql id="eqn1"><include refid="attr1"/>=<include refid="val1"/></sql>
-  <sql id="eqn2"><include refid="attr2"/>=<include refid="val2"/></sql>
-
+  <sql id="eqn0">
+    <include refid="attr0" />
+    =
+    <include refid="val0" />
+  </sql>
+  <sql id="eqn1">
+    <include refid="attr1" />
+    =
+    <include refid="val1" />
+  </sql>
+  <sql id="eqn2">
+    <include refid="attr2" />
+    =
+    <include refid="val2" />
+  </sql>
   <sql id="attrPrimary">
-    <include refid="attr0"/>
+    <include refid="attr0" />
   </sql>
   <sql id="attrOthers">
-    <include refid="attr1"/>,
-    <include refid="attr2"/>
+    <include refid="attr1" />
+    ,
+    <include refid="attr2" />
   </sql>
   <sql id="attrAll">
-    <include refid="attrPrimary"/>,
-	<include refid="attrOthers"/>
+    <include refid="attrPrimary" />
+    ,
+    <include refid="attrOthers" />
   </sql>
-
   <sql id="valPrimary">
-    <include refid="val0"/>
+    <include refid="val0" />
   </sql>
   <sql id="valOthers">
-    <include refid="val1"/>,
-    <include refid="val2"/>
+    <include refid="val1" />
+    ,
+    <include refid="val2" />
   </sql>
   <sql id="valAll">
-    <include refid="valPrimary"/>,
-	<include refid="valOthers"/>
+    <include refid="valPrimary" />
+    ,
+    <include refid="valOthers" />
   </sql>
-
   <sql id="eqnPrimary">
-    <include refid="eqn0"/>
+    <include refid="eqn0" />
   </sql>
   <sql id="eqnOthers">
-    <include refid="eqn1"/>,
-    <include refid="eqn2"/>
+    <include refid="eqn1" />
+    ,
+    <include refid="eqn2" />
   </sql>
   <sql id="eqnAll">
-    <include refid="eqnPrimary"/>,
-	<include refid="eqnOthers"/>
+    <include refid="eqnPrimary" />
+    ,
+    <include refid="eqnOthers" />
   </sql>
   <sql id="eqnWhere">
-    <include refid="eqnPrimary"/>
+    <include refid="eqnPrimary" />
   </sql>
-
   <insert id="insert" parameterType="Question">
     INSERT INTO
-    <include refid="table"/>
+    <include refid="table" />
     (
-    <include refid="attrAll"/>
+    <include refid="attrAll" />
     ) VALUES (
-    <include refid="valAll"/>
+    <include refid="valAll" />
     )
   </insert>
-
   <delete id="delete" parameterType="String">
     DELETE FROM
-    <include refid="table"/>
+    <include refid="table" />
     WHERE
-    <include refid="eqnWhere"/>
+    <include refid="eqnWhere" />
   </delete>
-
   <delete id="batchDelete" parameterType="List">
     DELETE FROM
-    <include refid="table"/>
+    <include refid="table" />
     WHERE
-    <include refid="attrPrimary"/>
+    <include refid="attrPrimary" />
     IN
-    <foreach item="item" index="index" collection="list" open="(" separator="," close=")">#{item}</foreach>
+    <foreach item="item" index="index" collection="list" open="("
+      separator="," close=")">#{item}</foreach>
   </delete>
-
   <update id="update" parameterType="Question">
     UPDATE
-    <include refid="table"/>
+    <include refid="table" />
     SET
-    <include refid="eqnOthers"/>
+    <include refid="eqnOthers" />
     WHERE
-    <include refid="eqnWhere"/>
+    <include refid="eqnWhere" />
   </update>
-
   <select id="selectOne" parameterType="String" resultType="Question">
     SELECT
-    <include refid="attrAll"/>
+    <include refid="attrAll" />
     FROM
-    <include refid="table"/>
+    <include refid="table" />
     WHERE
-    <include refid="eqnWhere"/>
+    <include refid="eqnWhere" />
   </select>
-
   <select id="selectList" parameterType="String" resultType="Question">
     SELECT
-    <include refid="attrAll"/>
+    <include refid="attrAll" />
     FROM
-    <include refid="table"/>
+    <include refid="table" />
   </select>
-
 </mapper>

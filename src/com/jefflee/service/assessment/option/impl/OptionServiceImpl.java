@@ -11,7 +11,6 @@ import com.jefflee.dto.ContainsDto;
 import com.jefflee.dto.OptionDto;
 import com.jefflee.entity.Option;
 import com.jefflee.service.assessment.option.OptionService;
-import com.jefflee.service.assessment.question.QuestionService;
 import com.jefflee.service.base.impl.BaseServiceImpl;
 import com.jefflee.service.relationship.contains.ContainsService;
 import com.jefflee.util.BeanUtil;
@@ -20,8 +19,6 @@ import com.jefflee.util.DatabaseUtil;
 @Service("optionService")
 public class OptionServiceImpl extends BaseServiceImpl<OptionDto, Option, String> implements OptionService {
 
-	@Resource(name = "questionService")
-	private QuestionService questionService;
 	@Resource(name = "containsService")
 	private ContainsService containsService;
 
@@ -31,17 +28,18 @@ public class OptionServiceImpl extends BaseServiceImpl<OptionDto, Option, String
 
 	@Override
 	public OptionDto create(OptionDto optionDto) throws Exception {
-		// Insert parent group relationship
-		ContainsDto parentContainsDto = new ContainsDto();
 		String optionId = DatabaseUtil.gnr32Uuid();
-		parentContainsDto.setParentId(optionDto.getQuestionId());
+		// create relationship
+		ContainsDto parentContainsDto = new ContainsDto();
+		String questionId = optionDto.getQuestionId();
+		parentContainsDto.setParentId(questionId);
 		parentContainsDto.setChildId(optionId);
-		parentContainsDto.setChildNo(0);
-		ContainsDto parentContains = containsService.create(parentContainsDto);
-		if (null == parentContains) {
+		parentContainsDto.setChildNo(containsService.findMaxChildNo(questionId) + 1);
+		if (null == containsService.create(parentContainsDto)) {
 			return null;
 		}
-		// Insert option
+
+		// create option
 		Option option = new Option();
 		BeanUtil.copyProperties(optionDto, option);
 		option.setOptionId(optionId);
@@ -54,16 +52,16 @@ public class OptionServiceImpl extends BaseServiceImpl<OptionDto, Option, String
 	}
 
 	@Override
-	public OptionDto findDetailById(String optionId) throws Exception {
-		return findById(optionId);
-	}
-
-	@Override
 	public OptionDto findById(String optionId) throws Exception {
 		Option option = baseDao.selectOne(mapperName + ".selectOne", optionId);
 		OptionDto optionDto = new OptionDto();
 		BeanUtil.copyProperties(option, optionDto);
 		return optionDto;
+	}
+
+	@Override
+	public OptionDto findDetailById(String optionId) throws Exception {
+		return findById(optionId);
 	}
 
 	@Override
@@ -79,7 +77,7 @@ public class OptionServiceImpl extends BaseServiceImpl<OptionDto, Option, String
 	@Override
 	public OptionDto modify(OptionDto optionDto) throws Exception {
 		Option option = new Option();
-		BeanUtil.copyProperties(optionDto, option);
+		BeanUtil.copyPropertiesIgnoreNull(optionDto, option);
 		if (1 == baseDao.update(mapperName + ".update", option)) {
 			return optionDto;
 		}

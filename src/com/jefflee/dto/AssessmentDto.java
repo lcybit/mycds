@@ -12,6 +12,14 @@ public class AssessmentDto extends ComponentDto {
 		return assessmentId;
 	}
 
+	public String getStatus() {
+		return status;
+	}
+
+	public String getStyle() {
+		return style;
+	}
+
 	public String getTheme() {
 		return theme;
 	}
@@ -20,16 +28,16 @@ public class AssessmentDto extends ComponentDto {
 		return title;
 	}
 
-	public String getStyle() {
-		return style;
-	}
-
-	public String getStatus() {
-		return status;
-	}
-
 	public void setAssessmentId(String assessmentId) {
 		this.assessmentId = assessmentId;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public void setStyle(String style) {
+		this.style = style;
 	}
 
 	public void setTheme(String theme) {
@@ -38,14 +46,6 @@ public class AssessmentDto extends ComponentDto {
 
 	public void setTitle(String title) {
 		this.title = title;
-	}
-
-	public void setStyle(String style) {
-		this.style = style;
-	}
-
-	public void setStatus(String status) {
-		this.status = status;
 	}
 
 }

@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-<title>Create Question</title>
+<title>Edit</title>
 <link rel="stylesheet" href="/plugin/layui/css/layui.css" />
 <script src="/plugin/jquery/jquery.js"></script>
 <script src="/plugin/jquery/jquery.serializejson.js"></script>
 <script src="/plugin/jsrender/jsrender.js"></script>
-<script src="/plugin/layui/layui.all.js"></script>
 </head>
+
 <body>
   <div class="layui-container" style="margin-top:30px;">
     <form class="layui-form" id="question" method="post">
@@ -39,12 +40,12 @@
   </div>
   <script>
     $(document).ready(function() {
-      var action = localStorage.getItem('currentAction');
+      var action = sessionStorage.getItem('currentAction');
       if (action === 'create') {
-        var questionnaireId = localStorage.getItem('currentQuestionnaireId');
+        var questionnaireId = sessionStorage.getItem('currentQuestionnaireId');
         $('#questionnaireId').attr('value', questionnaireId);
       } else if (action === 'modify') {
-        var questionId = localStorage.getItem('currentQuestionId');
+        var questionId = sessionStorage.getItem('currentQuestionId');
         $('#questionId').attr('value', questionId);
         $.ajax({
           async : false,
@@ -73,11 +74,12 @@
         }
       });
     }
-    
+  
     function goCancel() {
       var index = parent.layer.getFrameIndex(window.name);
       parent.layer.close(index);
     }
   </script>
 </body>
+
 </html>
